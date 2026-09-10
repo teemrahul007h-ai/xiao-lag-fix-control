@@ -1,12 +1,11 @@
 {
-  "command_id": "cmd_1789081240672",
+  "command_id": "cmd_1789081280486",
   "action": "toggle_app_lock",
   "payload": {
     "pkg": "com.android.camera",
     "locked": true,
     "name": "Camera"
   },
-  "timestamp": 1789081240672,
-  "executed": true,
-  "executed_at": 1789081248785
+  "timestamp": 1789081280486,
+  "executed": false
 }
