@@ -7,5 +7,6 @@
     "name": "Camera"
   },
   "timestamp": 1789081280486,
-  "executed": false
+  "executed": true,
+  "executed_at": 1789081288875
 }
