@@ -1,10 +1,10 @@
 {
-  "command_id": "cmd_1789082165715",
+  "command_id": "cmd_1789082169635",
   "action": "toggle_app",
   "payload": {
-    "pkg": "com.facebook.orca",
+    "pkg": "com.zhiliaoapp.musically",
     "selected": false
   },
-  "timestamp": 1789082165715,
+  "timestamp": 1789082169635,
   "executed": false
 }
