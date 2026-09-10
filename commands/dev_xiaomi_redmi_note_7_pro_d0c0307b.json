@@ -1,10 +1,10 @@
 {
-  "command_id": "cmd_1789082164015",
+  "command_id": "cmd_1789082165715",
   "action": "toggle_app",
   "payload": {
     "pkg": "com.facebook.orca",
-    "selected": true
+    "selected": false
   },
-  "timestamp": 1789082164015,
+  "timestamp": 1789082165715,
   "executed": false
 }
