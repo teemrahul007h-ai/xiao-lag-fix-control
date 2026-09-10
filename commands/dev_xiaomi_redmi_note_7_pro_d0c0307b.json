@@ -1,10 +1,7 @@
 {
-  "command_id": "cmd_1789081306971",
-  "action": "send_notification",
-  "payload": {
-    "message": "hii"
-  },
-  "timestamp": 1789081306972,
-  "executed": true,
-  "executed_at": 1789081314641
+  "command_id": "cmd_1789081322525",
+  "action": "gaming_mode",
+  "payload": {},
+  "timestamp": 1789081322525,
+  "executed": false
 }
