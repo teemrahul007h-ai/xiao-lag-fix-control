@@ -1,8 +1,10 @@
 {
-  "command_id": "cmd_1789081370099",
-  "action": "lock_device",
-  "payload": {},
-  "timestamp": 1789081370099,
-  "executed": true,
-  "executed_at": 1789081378024
+  "command_id": "cmd_1789082163220",
+  "action": "toggle_app",
+  "payload": {
+    "pkg": "com.facebook.orca",
+    "selected": true
+  },
+  "timestamp": 1789082163220,
+  "executed": false
 }
