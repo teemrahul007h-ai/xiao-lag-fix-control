@@ -3,5 +3,6 @@
   "action": "gaming_mode",
   "payload": {},
   "timestamp": 1789081322525,
-  "executed": false
+  "executed": true,
+  "executed_at": 1789081330513
 }
