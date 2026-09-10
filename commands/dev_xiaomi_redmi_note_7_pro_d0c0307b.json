@@ -1,9 +1,11 @@
 {
-  "command_id": "cmd_1789081235971",
-  "action": "set_hz",
+  "command_id": "cmd_1789081240672",
+  "action": "toggle_app_lock",
   "payload": {
-    "hz": 144
+    "pkg": "com.android.camera",
+    "locked": true,
+    "name": "Camera"
   },
-  "timestamp": 1789081235971,
+  "timestamp": 1789081240672,
   "executed": false
 }
