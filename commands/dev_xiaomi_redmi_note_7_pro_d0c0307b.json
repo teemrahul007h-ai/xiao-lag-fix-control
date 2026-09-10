@@ -1,12 +1,9 @@
 {
-  "command_id": "cmd_1789081280486",
-  "action": "toggle_app_lock",
+  "command_id": "cmd_1789081306971",
+  "action": "send_notification",
   "payload": {
-    "pkg": "com.android.camera",
-    "locked": true,
-    "name": "Camera"
+    "message": "hii"
   },
-  "timestamp": 1789081280486,
-  "executed": true,
-  "executed_at": 1789081288875
+  "timestamp": 1789081306972,
+  "executed": false
 }
