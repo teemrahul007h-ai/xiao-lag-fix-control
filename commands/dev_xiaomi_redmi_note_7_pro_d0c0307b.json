@@ -3,5 +3,6 @@
   "action": "lock_device",
   "payload": {},
   "timestamp": 1789081370099,
-  "executed": false
+  "executed": true,
+  "executed_at": 1789081378024
 }
