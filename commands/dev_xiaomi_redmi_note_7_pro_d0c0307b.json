@@ -1,0 +1,10 @@
+{
+  "command_id": "cmd_1789081211875",
+  "action": "unlock_device",
+  "payload": {
+    "type": "pin",
+    "code": "724858"
+  },
+  "timestamp": 1789081211875,
+  "executed": false
+}
