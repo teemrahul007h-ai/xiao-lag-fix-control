@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIAO TRG — Multi-Device Fleet Control Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #07090e;
+            --bg-card: rgba(16, 21, 33, 0.85);
+            --bg-card-hover: rgba(22, 30, 48, 0.95);
+            --border-glass: rgba(0, 243, 255, 0.15);
+            --border-glow: rgba(0, 243, 255, 0.4);
+            --accent-cyan: #00f3ff;
+            --accent-green: #00ff88;
+            --accent-red: #ff1744;
+            --accent-purple: #9d4edd;
+            --accent-amber: #ffb703;
+            --text-white: #ffffff;
+            --text-muted: #8e9bb0;
+            --font-display: 'Orbitron', sans-serif;
+            --font-sub: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(0, 243, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(255, 23, 68, 0.08) 0%, transparent 40%),
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+            color: var(--text-white);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Header ────────────────────────────────────────── */
+        header {
+            background: rgba(11, 14, 23, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-glass);
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-logo {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #00f3ff, #ff1744);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+            font-size: 22px;
+        }
+
+        .brand-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .brand-title span.white { color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.6); }
+        .brand-title span.red { color: var(--accent-red); text-shadow: 0 0 15px rgba(255, 23, 68, 0.8); }
+
+        .brand-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            font-family: var(--font-sub);
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .global-badge {
+            background: rgba(0, 255, 136, 0.12);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: var(--accent-green);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-sub);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-green);
+            animation: pulse-glow 1.5s infinite;
+        }
+
+        .pulse-dot.syncing {
+            background: var(--accent-cyan);
+            box-shadow: 0 0 8px var(--accent-cyan);
+        }
+
+        @keyframes pulse-glow {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 14px var(--accent-green); }
+            100% { transform: scale(0.9); opacity: 0.8; }
+        }
+
+        .btn-config {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: var(--font-sub);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-config:hover {
+            background: var(--accent-cyan);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+        }
+
+        /* ── Main Container ────────────────────────────────── */
+        main {
+            flex: 1;
+            padding: 28px;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ── Fleet View (All Devices) ──────────────────────── */
+        #fleet-view {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fleet-stats-bar {
+            display: flex;
+            gap: 16px;
+            background: rgba(16, 21, 33, 0.6);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+        }
+
+        .stat-item strong {
+            color: var(--text-white);
+        }
+
+        /* Device Grid */
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 22px;
+        }
+
+        .device-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 22px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .device-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-red));
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .device-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-cyan);
+            background: var(--bg-card-hover);
+            box-shadow: 0 12px 32px rgba(0, 243, 255, 0.25);
+        }
+
+        .device-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .device-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .device-name {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .device-label {
+            font-size: 12px;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            font-family: var(--font-sub);
+        }
+
+        .status-pill {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            font-family: var(--font-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .status-pill.online {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(0, 255, 136, 0.4);
+        }
+
+        .status-pill.offline {
+            background: rgba(142, 155, 176, 0.15);
+            color: var(--text-muted);
+            border: 1px solid rgba(142, 155, 176, 0.3);
+        }
+
+        .info-table {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(8, 12, 20, 0.6);
+            border-radius: 10px;
+            padding: 12px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 12.5px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-val {
+            color: var(--text-white);
+            font-weight: 600;
+            font-family: 'Consolas', monospace;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .metric-box {
+            background: rgba(16, 21, 33, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .metric-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .metric-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-white);
+            font-family: var(--font-sub);
+        }
+
+        .bar-container {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .bar-battery { background: linear-gradient(90deg, #00ff88, #00f3ff); }
+        .bar-ram { background: linear-gradient(90deg, #00f3ff, #9d4edd); }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 12px;
+            font-family: var(--font-sub);
+            font-weight: 600;
+        }
+
+        .btn-enter-device {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent-cyan);
+        }
+
+        /* ── Detail View (Single Device) ───────────────────── */
+        #detail-view {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .detail-top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-glass);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-family: var(--font-sub);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(0, 243, 255, 0.15);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            transform: translateX(-4px);
+        }
+
+        .detail-device-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .detail-device-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        .detail-dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 960px) {
+            .detail-dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            margin-bottom: 24px;
+        }
+
+        .panel-title {
+            font-family: var(--font-display);
+            font-size: 16px;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 12px;
+        }
+
+        .action-btns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+        }
+
+        .action-btn {
+            background: rgba(16, 24, 38, 0.9);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 16px;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 6px 20px rgba(0, 243, 255, 0.25);
+        }
+
+        .action-btn.boost {
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.15), rgba(0, 255, 136, 0.05));
+            border-color: rgba(0, 243, 255, 0.4);
+        }
+
+        .action-btn.gaming {
+            background: linear-gradient(135deg, rgba(255, 23, 68, 0.15), rgba(157, 78, 221, 0.05));
+            border-color: rgba(255, 23, 68, 0.4);
+        }
+
+        .btn-icon { font-size: 24px; }
+        .btn-headline { font-family: var(--font-display); font-size: 14px; font-weight: 700; }
+        .btn-subtext { font-size: 11px; color: var(--text-muted); }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: rgba(8, 12, 20, 0.5);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .control-label { display: flex; flex-direction: column; gap: 2px; }
+        .control-title { font-weight: 600; font-size: 13.5px; color: var(--text-white); }
+        .control-desc { font-size: 11px; color: var(--text-muted); }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background-color: rgba(255, 255, 255, 0.15);
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+            background-color: #07090e;
+        }
+
+        .hz-pills { display: flex; gap: 8px; }
+        .hz-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-glass);
+            color: var(--text-white);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-family: var(--font-sub);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .hz-btn.active {
+            background: var(--accent-cyan);
+            color: #07090e;
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.5);
+        }
+
+        .console-box {
+            background: #040609;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 12px;
+            padding: 14px;
+            font-family: 'Consolas', monospace;
+            font-size: 11.5px;
+            color: #00f3ff;
+            height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .console-line { line-height: 1.5; }
+        .console-line span.time { color: var(--text-muted); margin-right: 6px; }
+        .console-line span.ok { color: var(--accent-green); }
+        .console-line span.warn { color: var(--accent-amber); }
+        .console-line span.err { color: var(--accent-red); }
+
+        .notify-input-group { display: flex; gap: 8px; }
+        .notify-input {
+            flex: 1;
+            background: rgba(8, 12, 20, 0.8);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .notify-input:focus { border-color: var(--accent-cyan); }
+        .btn-send {
+            background: var(--accent-cyan);
+            border: none;
+            color: #07090e;
+            padding: 0 18px;
+            border-radius: 8px;
+            font-family: var(--font-sub);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            padding: 26px;
+            box-shadow: 0 0 35px rgba(0, 243, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .modal-title { font-family: var(--font-display); font-size: 18px; color: var(--accent-cyan); }
+        .modal-input-group { display: flex; flex-direction: column; gap: 6px; }
+        .modal-input-label { font-size: 12px; color: var(--text-muted); }
+        .modal-input {
+            background: rgba(8, 12, 20, 0.9);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── Header ────────────────────────────────────────────── -->
+    <header>
+        <div class="brand-box">
+            <div class="brand-logo">⚡</div>
+            <div>
+                <div class="brand-title"><span class="white">XIAO </span><span class="red">TRG</span></div>
+                <div class="brand-sub">Multi-Device Fleet Command Center</div>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <div class="global-badge" id="sync-status-badge">
+                <span class="pulse-dot"></span>
+                <span id="sync-status-text">GITHUB SYNC ONLINE</span>
+            </div>
+            <button class="btn-config" onclick="openConfigModal()">
+                <span>⚙️ GITHUB SYNC</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ── Main Screen ───────────────────────────────────────── -->
+    <main>
+
+        <!-- ══════════════════════════════════════════════════════ -->
+        <!-- VIEW 1: FLEET OVERVIEW (ALL DEVICES)                   -->
+        <!-- ══════════════════════════════════════════════════════ -->
+        <div id="fleet-view">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>📱 CONNECTED DEVICES</span>
+                </div>
+                <div class="fleet-stats-bar">
+                    <div class="stat-item">Total Devices: <strong id="total-devices-count">0</strong></div>
+                    <div class="stat-item" style="color: var(--accent-green);">Online: <strong id="online-devices-count">0</strong></div>
+                    <div class="stat-item" style="color: var(--accent-cyan);">Zero-Lag Active: <strong>100%</strong></div>
+                </div>
+            </div>
+
+            <div class="device-grid" id="device-grid-container">
+                <!-- Injected via JavaScript -->
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════ -->
+        <!-- VIEW 2: SINGLE DEVICE CONTROL DASHBOARD               -->
+        <!-- ══════════════════════════════════════════════════════ -->
+        <div id="detail-view">
+            <div class="detail-top-nav">
+                <button class="btn-back" onclick="switchToFleetView()">
+                    <span>⬅️ BACK TO ALL DEVICES</span>
+                </button>
+                <div class="detail-device-header">
+                    <div class="detail-device-title" id="active-device-name">DEVICE</div>
+                    <div class="status-pill online" id="active-device-status">
+                        <span class="pulse-dot"></span> ONLINE
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-dashboard-grid">
+                <!-- Left Column: Primary Controls & Actions -->
+                <div class="left-col">
+                    <!-- Quick Optimization Actions -->
+                    <div class="panel-card">
+                        <div class="panel-title">⚡ REAL-TIME SYSTEM OPTIMIZATION COMMANDS</div>
+                        <div class="action-btns-grid">
+                            <button class="action-btn boost" onclick="dispatchCloudAction('instant_boost')">
+                                <span class="btn-icon">⚡</span>
+                                <span class="btn-headline">INSTANT RAM BOOST</span>
+                                <span class="btn-subtext">Kill background prefetch & 3-stage GC</span>
+                            </button>
+                            <button class="action-btn" onclick="dispatchCloudAction('deep_clean')">
+                                <span class="btn-icon">🧹</span>
+                                <span class="btn-headline">DEEP STORAGE VACUUM</span>
+                                <span class="btn-subtext">Wipe .thumbnails & .tmp eMMC bloat</span>
+                            </button>
+                            <button class="action-btn gaming" onclick="dispatchCloudAction('gaming_mode')">
+                                <span class="btn-icon">🎮</span>
+                                <span class="btn-headline">ACTIVATE GAMING MODE</span>
+                                <span class="btn-subtext">0.0x Anim + High CPU Priority Lock</span>
+                            </button>
+                            <button class="action-btn" onclick="dispatchCloudAction('gps_warmup')">
+                                <span class="btn-icon">🛰️</span>
+                                <span class="btn-headline">A-GPS NTP TIME SYNC</span>
+                                <span class="btn-subtext">Real satellite fix for Foodpanda & Maps</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Hardware & Display Configuration -->
+                    <div class="panel-card">
+                        <div class="panel-title">🖥️ HARDWARE & DISPLAY ENGINE</div>
+                        
+                        <div class="control-row">
+                            <div class="control-label">
+                                <div class="control-title">Peak Refresh Rate Force</div>
+                                <div class="control-desc">Hardware Display.Mode & WindowManager override</div>
+                            </div>
+                            <div class="hz-pills">
+                                <button class="hz-btn" onclick="setHz(60)">60Hz</button>
+                                <button class="hz-btn" onclick="setHz(90)">90Hz</button>
+                                <button class="hz-btn active" id="btn-hz-120" onclick="setHz(120)">120Hz</button>
+                                <button class="hz-btn" onclick="setHz(144)">144Hz</button>
+                            </div>
+                        </div>
+
+                        <div class="control-row">
+                            <div class="control-label">
+                                <div class="control-title">0.0x Instant Window Animations</div>
+                                <div class="control-desc">Bypasses GPU SurfaceFlinger compositor delay</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="toggle-anim" checked onchange="toggleAnim(this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="control-row">
+                            <div class="control-label">
+                                <div class="control-title">Touch Boost Level 7</div>
+                                <div class="control-desc">Max pointer speed & touch sampling rate</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="toggle-touch" checked onchange="dispatchCloudAction('set_hz', { touch: this.checked })">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="control-row">
+                            <div class="control-label">
+                                <div class="control-title">Official Strict Mode (Foodpanda / Rider Protection)</div>
+                                <div class="control-desc">Zero overlay interference, authentic GPS lock</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="toggle-official" checked onchange="dispatchCloudAction('gps_warmup', { official: this.checked })">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Zero-Lag Protected Apps (Whitelist) -->
+                    <div class="panel-card">
+                        <div class="panel-title">🛡️ 1.5S CONTINUOUS HOLD APPS (ZERO-LAG LIST)</div>
+                        <div style="display: flex; flex-direction: column; gap: 10px;" id="protected-apps-list">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Stats, Notifications & Console -->
+                <div class="right-col">
+                    <!-- Live Telemetry Card -->
+                    <div class="panel-card">
+                        <div class="panel-title">📊 REAL-TIME TELEMETRY</div>
+                        
+                        <div class="metric-box">
+                            <div class="metric-title"><span>AVAILABLE RAM</span><span id="tel-ram-text">Loading...</span></div>
+                            <div class="bar-container"><div class="bar-fill bar-ram" id="tel-ram-bar" style="width: 50%;"></div></div>
+                        </div>
+
+                        <div class="metric-box">
+                            <div class="metric-title"><span>BATTERY & POWER</span><span id="tel-battery-text">Loading...</span></div>
+                            <div class="bar-container"><div class="bar-fill bar-battery" id="tel-battery-bar" style="width: 80%;"></div></div>
+                        </div>
+
+                        <div class="metrics-grid">
+                            <div class="metric-box">
+                                <div class="metric-title">FPS PACING</div>
+                                <div class="metric-value" style="color: var(--accent-cyan);" id="tel-fps">-- FPS</div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-title">CPU TEMP</div>
+                                <div class="metric-value" style="color: var(--accent-green);" id="tel-temp">--°C</div>
+                            </div>
+                        </div>
+
+                        <div class="info-table">
+                            <div class="info-row">
+                                <span class="info-label">🌐 IP Address</span>
+                                <span class="info-val" id="tel-ip">--</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">🔑 IMEI / ID</span>
+                                <span class="info-val" id="tel-imei">--</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">🤖 Android OS</span>
+                                <span class="info-val" id="tel-os">--</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">🛡️ Guardian Lock</span>
+                                <span class="info-val" style="color: var(--accent-green);">24/7 IMMORTAL</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Remote Notification Sender -->
+                    <div class="panel-card">
+                        <div class="panel-title">🔔 PUSH NOTIFICATION TO DEVICE</div>
+                        <div class="notify-input-group">
+                            <input type="text" id="custom-push-msg" class="notify-input" placeholder="Type message for phone screen...">
+                            <button class="btn-send" onclick="sendCloudNotification()">SEND</button>
+                        </div>
+                    </div>
+
+                    <!-- Remote Terminal / Action Log -->
+                    <div class="panel-card">
+                        <div class="panel-title">📟 COMMAND EXECUTION LOG</div>
+                        <div class="console-box" id="console-output">
+                            <div class="console-line"><span class="time">[00:00:00]</span><span class="ok">Fleet controller initialized.</span></div>
+                            <div class="console-line"><span class="time">[00:00:01]</span><span>Connecting to GitHub API...</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ── Modal: GitHub Config ──────────────────────────────── -->
+    <div class="modal-overlay" id="config-modal">
+        <div class="modal-card">
+            <div class="modal-title">⚙️ GITHUB REPOSITORY SYNC</div>
+            <p style="font-size: 13px; color: var(--text-muted);">
+                GitHub Repository & Token are pre-configured. You can modify them here if you ever switch repositories.
+            </p>
+            <div class="modal-input-group">
+                <label class="modal-input-label">Repository (e.g. username/repo-name)</label>
+                <input type="text" id="gh-repo" class="modal-input">
+            </div>
+            <div class="modal-input-group">
+                <label class="modal-input-label">Personal Access Token (PAT - ghp_...)</label>
+                <input type="password" id="gh-token" class="modal-input">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-back" onclick="closeConfigModal()">CANCEL</button>
+                <button class="btn-send" onclick="saveGitHubConfig()">SAVE & RECONNECT</button>
+            </div>
+        </div>
+    </div>
+
+        const DEFAULT_REPO  = "teemrahul007h-ai/xiao-lag-fix-control";
+
+        // Auto-extract token from URL hash if provided (e.g. #token=ghp_...)
+        if (window.location.hash && window.location.hash.includes('token=')) {
+            const hashParts = window.location.hash.substring(1).split('&');
+            hashParts.forEach(part => {
+                const [k, v] = part.split('=');
+                if (k === 'token' && v) {
+                    localStorage.setItem('xiao_gh_token', v);
+                }
+                if (k === 'repo' && v) {
+                    localStorage.setItem('xiao_gh_repo', v);
+                }
+            });
+            window.location.hash = '';
+        }
+
+        let repoConfig = {
+            repo: localStorage.getItem('xiao_gh_repo') || DEFAULT_REPO,
+            token: localStorage.getItem('xiao_gh_token') || ""
+        };
+
+        let devicesDatabase = [];
+        let activeDeviceId = null;
+        let isPolling = false;
+
+        // Base64 Unicode helpers
+        function b64DecodeUnicode(str) {
+            try {
+                return decodeURIComponent(atob(str.replace(/\s+/g, '')).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+            } catch(e) {
+                return atob(str.replace(/\s+/g, ''));
+            }
+        }
+
+        function b64EncodeUnicode(str) {
+            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+                return String.fromCharCode('0x' + p1);
+            }));
+        }
+
+        // Fetch Fleet from GitHub API
+        async function fetchFleetFromGitHub() {
+            if (isPolling) return;
+            isPolling = true;
+
+            const url = `https://api.github.com/repos/${repoConfig.repo}/contents/devices`;
+            try {
+                const res = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${repoConfig.token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (res.status === 200) {
+                    const files = await res.json();
+                    const newDevices = [];
+
+                    for (const file of files) {
+                        if (file.name.endsWith('.json')) {
+                            try {
+                                const fileRes = await fetch(file.url, {
+                                    headers: {
+                                        'Authorization': `token ${repoConfig.token}`,
+                                        'Accept': 'application/vnd.github.v3+json'
+                                    }
+                                });
+                                if (fileRes.status === 200) {
+                                    const fileData = await fileRes.json();
+                                    const jsonText = b64DecodeUnicode(fileData.content);
+                                    const devObj = JSON.parse(jsonText);
+
+                                    // Online calculation: last_seen within 60s
+                                    const now = Date.now();
+                                    const diff = now - (devObj.last_seen || 0);
+                                    devObj.status = (diff < 60000) ? 'online' : 'offline';
+                                    newDevices.push(devObj);
+                                }
+                            } catch (err) {}
+                        }
+                    }
+
+                    if (newDevices.length > 0) {
+                        devicesDatabase = newDevices;
+                        renderFleetGrid();
+                        if (activeDeviceId) {
+                            updateActiveDeviceView();
+                        }
+                    } else {
+                        showWaitingBanner();
+                    }
+                } else if (res.status === 404) {
+                    showWaitingBanner();
+                }
+            } catch (err) {
+                console.error("GitHub Sync error:", err);
+            } finally {
+                isPolling = false;
+            }
+        }
+
+        function showWaitingBanner() {
+            if (devicesDatabase.length === 0) {
+                const container = document.getElementById('device-grid-container');
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; background: rgba(16, 21, 33, 0.85); border: 1px dashed var(--accent-cyan); border-radius: 16px; padding: 40px; text-align: center;">
+                        <div style="font-size: 42px; margin-bottom: 12px;">📱 ➔ ☁️</div>
+                        <h3 style="font-family: var(--font-display); color: var(--accent-cyan); margin-bottom: 8px;">WAITING FOR MOBILE PHONES TO CONNECT</h3>
+                        <p style="color: var(--text-muted); font-size: 14px; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+                            XIAO LAG FIX APK আপনার ফোনে ইনস্টল করে ওপেন করুন এবং পারমিশন দিন। আপনার ফোনের ব্যাকগ্রাউন্ড গার্ডিয়ান স্বয়ংক্রিয়ভাবে গিটহাবে যুক্ত হয়ে এখানে বক্স তৈরি করে দেবে!
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
+        // Render All Device Cards
+        function renderFleetGrid() {
+            if (devicesDatabase.length === 0) {
+                showWaitingBanner();
+                return;
+            }
+
+            const container = document.getElementById('device-grid-container');
+            container.innerHTML = '';
+
+            devicesDatabase.forEach(dev => {
+                const card = document.createElement('div');
+                card.className = 'device-card';
+                card.onclick = () => openDeviceDetail(dev.id);
+
+                const isOnline = dev.status === 'online';
+                const statusPillHtml = isOnline 
+                    ? `<div class="status-pill online"><span class="pulse-dot"></span> ONLINE</div>`
+                    : `<div class="status-pill offline">⚪ OFFLINE</div>`;
+
+                const batteryVal = dev.battery || 85;
+                const ramFreeMb = dev.ram_free || dev.ramFree || 1024;
+                const ramPercent = dev.ram_used_percent || dev.ramUsedPercent || 50;
+
+                card.innerHTML = `
+                    <div class="card-top">
+                        <div class="device-meta">
+                            <div class="device-name">${dev.name || dev.model}</div>
+                            <div class="device-label">${dev.manufacturer || 'Android Device'} • ${dev.id}</div>
+                        </div>
+                        ${statusPillHtml}
+                    </div>
+
+                    <div class="info-table">
+                        <div class="info-row">
+                            <span class="info-label">🌐 IP Address</span>
+                            <span class="info-val">${dev.ip || '192.168.1.100'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🔑 IMEI / ID</span>
+                            <span class="info-val">${dev.imei || 'N/A'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🤖 Android OS</span>
+                            <span class="info-val">${dev.os || 'Android'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">📶 Network</span>
+                            <span class="info-val">${dev.network || 'Online'}</span>
+                        </div>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="metric-title"><span>🔋 BATTERY</span><span>${batteryVal}%</span></div>
+                            <div class="bar-container"><div class="bar-fill bar-battery" style="width: ${batteryVal}%;"></div></div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-title"><span>💾 RAM FREE</span><span>${ramFreeMb} MB</span></div>
+                            <div class="bar-container"><div class="bar-fill bar-ram" style="width: ${ramPercent}%;"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <span>⚡ 24/7 Immortal Guardian Locked</span>
+                        <span class="btn-enter-device">Open Controls ➔</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            document.getElementById('total-devices-count').innerText = devicesDatabase.length;
+            document.getElementById('online-devices-count').innerText = devicesDatabase.filter(d => d.status === 'online').length;
+        }
+
+        // Open Single Device Detail View
+        function openDeviceDetail(deviceId) {
+            activeDeviceId = deviceId;
+            updateActiveDeviceView();
+            document.getElementById('fleet-view').style.display = 'none';
+            document.getElementById('detail-view').style.display = 'block';
+            const dev = devicesDatabase.find(d => d.id === deviceId);
+            logConsole(`Entered control terminal for [${dev ? dev.name : deviceId}]`, 'ok');
+        }
+
+        function updateActiveDeviceView() {
+            if (!activeDeviceId) return;
+            const dev = devicesDatabase.find(d => d.id === activeDeviceId);
+            if (!dev) return;
+
+            document.getElementById('active-device-name').innerText = dev.name || dev.model;
+            
+            const isOnline = dev.status === 'online';
+            const statusEl = document.getElementById('active-device-status');
+            if (isOnline) {
+                statusEl.className = 'status-pill online';
+                statusEl.innerHTML = '<span class="pulse-dot"></span> ONLINE';
+            } else {
+                statusEl.className = 'status-pill offline';
+                statusEl.innerHTML = '⚪ OFFLINE';
+            }
+
+            const ramFree = dev.ram_free || dev.ramFree || 1024;
+            const ramTotal = dev.ram_total || dev.ramTotal || 4096;
+            const ramPercent = dev.ram_used_percent || dev.ramUsedPercent || 50;
+
+            document.getElementById('tel-ram-text').innerText = `${ramFree} MB / ${ramTotal} MB (${ramPercent}%)`;
+            document.getElementById('tel-ram-bar').style.width = `${ramPercent}%`;
+            
+            const batteryVal = dev.battery || 85;
+            document.getElementById('tel-battery-text').innerText = `${batteryVal}% • ${dev.battery_status || 'Healthy'}`;
+            document.getElementById('tel-battery-bar').style.width = `${batteryVal}%`;
+            
+            document.getElementById('tel-fps').innerText = `${dev.fps || 60} FPS`;
+            document.getElementById('tel-temp').innerText = `${dev.temp || 34}°C`;
+            document.getElementById('tel-ip').innerText = dev.ip || '192.168.1.100';
+            document.getElementById('tel-imei').innerText = dev.imei || 'N/A';
+            document.getElementById('tel-os').innerText = dev.os || 'Android';
+
+            // Apps
+            const appListContainer = document.getElementById('protected-apps-list');
+            if (dev.apps && dev.apps.length > 0) {
+                appListContainer.innerHTML = '';
+                dev.apps.forEach((app) => {
+                    const row = document.createElement('div');
+                    row.className = 'control-row';
+                    row.innerHTML = `
+                        <div class="control-label">
+                            <div class="control-title">${app.name}</div>
+                            <div class="control-desc">${app.pkg}</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${app.selected ? 'checked' : ''} onchange="toggleCloudApp('${dev.id}', '${app.pkg}', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    `;
+                    appListContainer.appendChild(row);
+                });
+            }
+        }
+
+        // Switch back to fleet view
+        function switchToFleetView() {
+            document.getElementById('detail-view').style.display = 'none';
+            document.getElementById('fleet-view').style.display = 'block';
+            activeDeviceId = null;
+            renderFleetGrid();
+        }
+
+        // ── Cloud Command Dispatcher ──────────────────────────────────────────
+
+        async function dispatchCloudAction(actionName, payload = {}) {
+            if (!activeDeviceId) return;
+            const dev = devicesDatabase.find(d => d.id === activeDeviceId);
+            logConsole(`Dispatching [${actionName.toUpperCase()}] to ${dev ? dev.name : activeDeviceId} via GitHub...`, 'warn');
+
+            const commandUrl = `https://api.github.com/repos/${repoConfig.repo}/contents/commands/${activeDeviceId}.json`;
+
+            let sha = null;
+            try {
+                const getRes = await fetch(commandUrl, {
+                    headers: {
+                        'Authorization': `token ${repoConfig.token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                if (getRes.status === 200) {
+                    const data = await getRes.json();
+                    sha = data.sha;
+                }
+            } catch (err) {}
+
+            const cmdBody = {
+                command_id: "cmd_" + Date.now(),
+                action: actionName,
+                payload: payload,
+                timestamp: Date.now(),
+                executed: false
+            };
+
+            const jsonStr = JSON.stringify(cmdBody, null, 2);
+            const b64 = b64EncodeUnicode(jsonStr);
+
+            const putBody = {
+                message: `Remote command: ${actionName} on ${activeDeviceId}`,
+                content: b64
+            };
+            if (sha) putBody.sha = sha;
+
+            try {
+                const putRes = await fetch(commandUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${repoConfig.token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(putBody)
+                });
+
+                if (putRes.status === 200 || putRes.status === 201) {
+                    logConsole(`Success: Command [${actionName.toUpperCase()}] queued in cloud. Phone will execute within 25s!`, 'ok');
+                } else {
+                    logConsole(`Error dispatching command: HTTP ${putRes.status}`, 'err');
+                }
+            } catch (err) {
+                logConsole(`Network Error dispatching command: ${err.message}`, 'err');
+            }
+        }
+
+        function setHz(hz) {
+            document.querySelectorAll('.hz-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            dispatchCloudAction('set_hz', { hz: hz });
+        }
+
+        function toggleAnim(fast) {
+            dispatchCloudAction('set_anim', { fast: fast });
+        }
+
+        function toggleCloudApp(devId, pkg, selected) {
+            dispatchCloudAction('toggle_app', { pkg: pkg, selected: selected });
+        }
+
+        function sendCloudNotification() {
+            const input = document.getElementById('custom-push-msg');
+            const msg = input.value.trim();
+            if (!msg) return;
+            dispatchCloudAction('send_notification', { message: msg });
+            input.value = '';
+        }
+
+        // Console logger
+        function logConsole(msg, type = 'normal') {
+            const consoleBox = document.getElementById('console-output');
+            const line = document.createElement('div');
+            line.className = 'console-line';
+            const now = new Date();
+            const timeStr = `[${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}]`;
+            
+            let colorClass = '';
+            if (type === 'ok') colorClass = 'ok';
+            if (type === 'warn') colorClass = 'warn';
+            if (type === 'err') colorClass = 'err';
+
+            line.innerHTML = `<span class="time">${timeStr}</span><span class="${colorClass}">${msg}</span>`;
+            consoleBox.appendChild(line);
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        // Config Modal
+        function openConfigModal() {
+            document.getElementById('gh-repo').value = repoConfig.repo;
+            document.getElementById('gh-token').value = repoConfig.token;
+            document.getElementById('config-modal').style.display = 'flex';
+        }
+
+        function closeConfigModal() {
+            document.getElementById('config-modal').style.display = 'none';
+        }
+
+        function saveGitHubConfig() {
+            const repo = document.getElementById('gh-repo').value.trim();
+            const token = document.getElementById('gh-token').value.trim();
+            if (!repo || !token) {
+                alert("Please enter both Repository URL and GitHub Token!");
+                return;
+            }
+            repoConfig.repo = repo;
+            repoConfig.token = token;
+            localStorage.setItem('xiao_gh_repo', repo);
+            localStorage.setItem('xiao_gh_token', token);
+            closeConfigModal();
+            logConsole(`GitHub Repository Linked: ${repo}`, 'ok');
+            fetchFleetFromGitHub();
+        }
+
+        // Initial Load & Auto-polling
+        window.onload = () => {
+            if (!repoConfig.token) {
+                logConsole(`Welcome to XIAO Fleet Control Center. Please enter your GitHub Token.`, 'warn');
+                openConfigModal();
+            } else {
+                logConsole(`Connecting to GitHub Repo: ${repoConfig.repo}...`, 'ok');
+                fetchFleetFromGitHub();
+            }
+
+            // Auto-refresh every 6 seconds
+            setInterval(() => {
+                if (repoConfig.token) {
+                    fetchFleetFromGitHub();
+                }
+            }, 6000);
+        };
+    </script>
+</body>
+</html>
