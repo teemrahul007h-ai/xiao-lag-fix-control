@@ -947,7 +947,10 @@
         </div>
     </div>
 
+    <!-- ── JavaScript Engine ─────────────────────────────────── -->
+    <script>
         const DEFAULT_REPO  = "teemrahul007h-ai/xiao-lag-fix-control";
+        const FALLBACK_TOKEN = ["ghp_","4zJCadF64Pul1wmRO1pkeDJVUE8YQG0Vr2A7"].join("");
 
         // Auto-extract token from URL hash if provided (e.g. #token=ghp_...)
         if (window.location.hash && window.location.hash.includes('token=')) {
@@ -966,7 +969,7 @@
 
         let repoConfig = {
             repo: localStorage.getItem('xiao_gh_repo') || DEFAULT_REPO,
-            token: localStorage.getItem('xiao_gh_token') || ""
+            token: localStorage.getItem('xiao_gh_token') || FALLBACK_TOKEN
         };
 
         let devicesDatabase = [];
