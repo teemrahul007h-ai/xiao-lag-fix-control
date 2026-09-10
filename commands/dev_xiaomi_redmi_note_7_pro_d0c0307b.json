@@ -1,11 +1,9 @@
 {
-  "command_id": "cmd_1789081225687",
-  "action": "unlock_device",
+  "command_id": "cmd_1789081235971",
+  "action": "set_hz",
   "payload": {
-    "type": "pin",
-    "code": "724858"
+    "hz": 144
   },
-  "timestamp": 1789081225687,
-  "executed": true,
-  "executed_at": 1789081234400
+  "timestamp": 1789081235971,
+  "executed": false
 }
