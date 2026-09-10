@@ -1,10 +1,7 @@
 {
-  "command_id": "cmd_1789082169635",
-  "action": "toggle_app",
-  "payload": {
-    "pkg": "com.zhiliaoapp.musically",
-    "selected": false
-  },
-  "timestamp": 1789082169635,
+  "command_id": "cmd_1789082401686",
+  "action": "instant_boost",
+  "payload": {},
+  "timestamp": 1789082401686,
   "executed": false
 }
