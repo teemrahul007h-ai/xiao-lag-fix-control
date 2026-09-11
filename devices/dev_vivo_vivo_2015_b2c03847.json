@@ -7,7 +7,7 @@
   "ip": "10.49.252.143",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789132568181,
+  "last_seen": 1789132571143,
   "battery": 69,
   "battery_status": "Discharging • Healthy",
   "network": "📶 4G LTE (Robi)",
@@ -26,7 +26,7 @@
     "provider": "fused"
   },
   "ram_total": 1822,
-  "ram_free": 416,
+  "ram_free": 408,
   "ram_used_percent": 77,
   "temp": 35,
   "fps": 60,
@@ -34,9 +34,9 @@
   "guardian_active": true,
   "screen_sharing": false,
   "screen_frames": 0,
-  "is_locked": true,
+  "is_locked": false,
   "screen_on": true,
-  "lock_status": "locked",
+  "lock_status": "unlocked",
   "apps": [
     {
       "name": "Albums",
