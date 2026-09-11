@@ -7,7 +7,7 @@
   "ip": "192.168.43.23",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789152179263,
+  "last_seen": 1789152185971,
   "battery": 47,
   "battery_status": "Discharging • Healthy",
   "network": "📶 4G LTE (Robi) [🔥 Hotspot ON]",
@@ -26,7 +26,7 @@
     "provider": "gps"
   },
   "ram_total": 1822,
-  "ram_free": 588,
+  "ram_free": 584,
   "ram_used_percent": 67,
   "temp": 34,
   "fps": 60,
