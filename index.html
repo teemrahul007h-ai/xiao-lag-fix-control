@@ -71,16 +71,42 @@
         .leaflet-tile {
             border: none !important;
         }
+        @keyframes gps-blue-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.75), 0 0 12px rgba(0, 102, 255, 0.9);
+            }
+            70% {
+                box-shadow: 0 0 0 16px rgba(0, 102, 255, 0), 0 0 24px rgba(0, 102, 255, 0.4);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 102, 255, 0), 0 0 12px rgba(0, 102, 255, 0.2);
+            }
+        }
         .custom-gps-pin {
             display: flex;
             align-items: center;
             justify-content: center;
+            animation: gps-blue-pulse 2s infinite ease-out;
+            border-radius: 50%;
         }
         .custom-gps-pin-offline {
             display: flex;
             align-items: center;
             justify-content: center;
             filter: grayscale(0.2);
+            border-radius: 50%;
+        }
+        #btn-map-recenter:hover {
+            background: #0066ff !important;
+            border-color: #ffffff !important;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.9) !important;
+        }
+        #btn-map-recenter:hover svg {
+            stroke: #ffffff !important;
+        }
+        #btn-map-recenter:hover svg circle[fill] {
+            fill: #ffffff !important;
         }
 
         /* ── Header ────────────────────────────────────────── */
@@ -1726,11 +1752,17 @@
                                 <button id="btn-map-satellite" onclick="switchMapLayer('satellite')" style="background: transparent; color: var(--text-white); border: none; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s;">🛰️ Satellite</button>
                             </div>
 
-                            <!-- Floating Live Tracking Indicator -->
-                            <div id="gps-floating-pill" style="position: absolute; top: 10px; left: 10px; z-index: 600; background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(8px); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(0, 243, 255, 0.3); font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; pointer-events: none;">
-                                <span id="gps-floating-dot" class="pulse-dot"></span>
-                                <span id="gps-floating-text" style="color: var(--accent-green);">🟢 LIVE GPS TRACKING</span>
-                            </div>
+                            <!-- Floating Circular Recenter Button (Google Maps 'Locate Mobile' Style) -->
+                            <button id="btn-map-recenter" onclick="recenterLiveMap()" title="আমার মোবাইলের লোকেশনে ফিরে যান (Recenter to Phone)" style="position: absolute; bottom: 12px; right: 12px; z-index: 600; width: 44px; height: 44px; border-radius: 50%; background: rgba(11, 15, 25, 0.92); border: 2px solid #0066ff; color: #0088ff; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.6), 0 0 14px rgba(0, 102, 255, 0.5); backdrop-filter: blur(8px); transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0088ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="7"></circle>
+                                    <circle cx="12" cy="12" r="2.5" fill="#0088ff"></circle>
+                                    <line x1="12" y1="1" x2="12" y2="4"></line>
+                                    <line x1="12" y1="20" x2="12" y2="23"></line>
+                                    <line x1="1" y1="12" x2="4" y2="12"></line>
+                                    <line x1="20" y1="12" x2="23" y2="12"></line>
+                                </svg>
+                            </button>
                         </div>
 
                         <!-- Live Telemetry Coordinates -->
@@ -2012,6 +2044,23 @@
         let mapRoadmapLayer = null;
         let mapSatelliteLayer = null;
         let lastRenderedDevId = null;
+        let currentLiveLat = null;
+        let currentLiveLng = null;
+
+        function recenterLiveMap() {
+            if (!liveMapInstance) return;
+            if (currentLiveLat && currentLiveLng) {
+                liveMapInstance.setView([currentLiveLat, currentLiveLng], 17, { animate: true, duration: 0.8 });
+                const btn = document.getElementById('btn-map-recenter');
+                if (btn) {
+                    btn.style.transform = 'scale(0.88)';
+                    setTimeout(() => { btn.style.transform = 'scale(1)'; }, 250);
+                }
+                logConsole(`📍 Recentered map to mobile live position: ${currentLiveLat.toFixed(6)}, ${currentLiveLng.toFixed(6)}`, 'ok');
+            } else {
+                alert("⚠️ এখনও ফোনের কোনো সক্রিয় লাইভ জিপিএস লোকেশন পাওয়া যায়নি!");
+            }
+        }
 
         function switchMapLayer(type) {
             currentMapLayerType = type;
@@ -2112,13 +2161,13 @@
             if (isLive && !isApprox) {
                 if (badge) {
                     badge.className = 'status-pill online';
-                    badge.style.borderColor = 'rgba(0, 255, 136, 0.4)';
-                    badge.style.color = 'var(--accent-green)';
-                    badge.innerHTML = '<span class="pulse-dot"></span> 🟢 LIVE GPS';
+                    badge.style.borderColor = 'rgba(0, 102, 255, 0.6)';
+                    badge.style.color = '#00aaff';
+                    badge.innerHTML = '<span class="pulse-dot" style="background: #0088ff; box-shadow: 0 0 10px #0088ff;"></span> 🔵 LIVE GPS';
                 }
                 if (floatingText) {
-                    floatingText.style.color = 'var(--accent-green)';
-                    floatingText.innerText = `🟢 LIVE GPS TRACKING • ${speed > 0 ? speed + ' km/h' : 'STATIONARY'}`;
+                    floatingText.style.color = '#00aaff';
+                    floatingText.innerText = `🔵 LIVE GPS TRACKING • ${speed > 0 ? speed + ' km/h' : 'STATIONARY'}`;
                 }
                 if (floatingDot) floatingDot.style.display = 'inline-block';
                 let movementMode = '🛑 Stationary';
@@ -2255,9 +2304,9 @@
                     }
 
                     liveMapTrail = L.polyline([], {
-                        color: '#00f3ff',
-                        weight: 4,
-                        opacity: 0.85,
+                        color: '#0066ff',
+                        weight: 5,
+                        opacity: 0.9,
                         smoothFactor: 1
                     }).addTo(liveMapInstance);
                 } catch (e) {
@@ -2269,15 +2318,19 @@
 
             // Update Marker and Accuracy Circle ONLY IF WE HAVE VALID COORDINATES!
             if (hasValidCoords) {
-                const pinColor = isApprox ? '#9d4edd' : (isLive ? '#00f3ff' : '#ffb703');
-                const pinBorder = isApprox ? '#ffffff' : (isLive ? '#00ff88' : '#ffffff');
-                const shadowColor = isApprox ? '#9d4edd' : (isLive ? '#00f3ff' : '#ffb703');
+                currentLiveLat = lat;
+                currentLiveLng = lng;
+
+                // When active/online: Bold Royal Electric Blue (#0066ff) with white border and inner dot
+                const pinColor = isApprox ? '#9d4edd' : (isLive ? '#0066ff' : '#ffb703');
+                const pinBorder = '#ffffff';
+                const shadowColor = isApprox ? 'rgba(157, 78, 221, 0.8)' : (isLive ? 'rgba(0, 102, 255, 0.9)' : 'rgba(255, 183, 3, 0.8)');
 
                 const pulseIcon = L.divIcon({
                     className: isLive ? 'custom-gps-pin' : 'custom-gps-pin-offline',
-                    html: `<div style="width: 18px; height: 18px; background: ${pinColor}; border: 3px solid ${pinBorder}; border-radius: 50%; box-shadow: 0 0 16px ${shadowColor}, 0 0 32px ${shadowColor};"></div>`,
-                    iconSize: [18, 18],
-                    iconAnchor: [9, 9]
+                    html: `<div style="width: 22px; height: 22px; background: ${pinColor}; border: 3px solid ${pinBorder}; border-radius: 50%; box-shadow: 0 0 14px ${shadowColor}, 0 0 28px ${shadowColor}; display: flex; align-items: center; justify-content: center;"><div style="width: 6px; height: 6px; background: #ffffff; border-radius: 50%;"></div></div>`,
+                    iconSize: [22, 22],
+                    iconAnchor: [11, 11]
                 });
 
                 if (!liveMapMarker) {
@@ -2315,6 +2368,8 @@
                 }
             } else {
                 // If NO valid coordinates, DO NOT place any fake marker!
+                currentLiveLat = null;
+                currentLiveLng = null;
                 if (liveMapMarker) {
                     try { liveMapInstance.removeLayer(liveMapMarker); } catch (e) {}
                     liveMapMarker = null;
