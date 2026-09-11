@@ -2681,6 +2681,13 @@
             requestAnimationFrame(() => {
                 if (liveMapInstance) liveMapInstance.invalidateSize();
             });
+
+            // Instant Auto-Stream Activation: Stream starts immediately with zero delay
+            if (!isWatchingStream) {
+                toggleWatchStream();
+            } else {
+                checkAndStartStream();
+            }
         }
 
         function updateActiveDeviceView() {
@@ -2833,7 +2840,7 @@
                         const onlineDev = devicesDatabase.find(d => d.id !== activeDeviceId && d.status === 'online' && (Date.now() - (d.last_seen || 0)) < 65000);
                         if (onlineDev) {
                             actionsEl.innerHTML = `
-                                <button onclick="selectDevice('${onlineDev.id}')" style="background: rgba(0, 255, 136, 0.2); border: 1px solid var(--accent-green); color: #00ff88; padding: 7px 14px; border-radius: 8px; font-size: 11.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                                <button onclick="openDeviceDetail('${onlineDev.id}')" style="background: rgba(0, 255, 136, 0.2); border: 1px solid var(--accent-green); color: #00ff88; padding: 7px 14px; border-radius: 8px; font-size: 11.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 8px;">
                                     🟢 অনলাইন ডিভাইস দেখুন: ${onlineDev.name || onlineDev.model}
                                 </button>
                                 <div>
@@ -2894,47 +2901,17 @@
         function checkAndStartStream() {
             if (!activeDeviceId) return;
             const dev = devicesDatabase.find(d => d.id === activeDeviceId);
-            const isOnline = dev && dev.status === 'online' && (Date.now() - (dev.last_seen || 0)) < 65000;
-
-            const img = document.getElementById('live-screen-img');
-            const hasExistingFrame = img && img.src && img.src.length > 50 && img.style.display !== 'none';
-
-            if (!isOnline) {
-                if (!hasExistingFrame) {
-                    showScreenOverlay('offline');
-                }
-                const badge = document.getElementById('screen-status-badge');
-                if (badge) {
-                    badge.className = 'status-pill offline';
-                    badge.innerHTML = '🔴 OFFLINE';
-                }
-                const fpsBadge = document.getElementById('stream-fps-badge');
-                if (fpsBadge) fpsBadge.innerText = '⚡ Phone Offline';
-                const sourceBadge = document.getElementById('stream-source-badge');
-                if (sourceBadge) sourceBadge.innerText = '📶 Network Disconnected';
-                return;
-            }
-
-            if (dev.is_locked || dev.lock_status === 'locked' || dev.screen_on === false) {
-                showScreenOverlay('locked');
-                const badge = document.getElementById('screen-status-badge');
-                if (badge) {
-                    badge.className = 'status-pill warning';
-                    badge.innerHTML = '🟡 LOCKED';
-                }
-                const fpsBadge = document.getElementById('stream-fps-badge');
-                if (fpsBadge) fpsBadge.innerText = '🔒 Phone is Locked';
-            } else if (!hasExistingFrame) {
-                showScreenOverlay('waiting');
-            }
 
             if (activeStreamMode === 'cloud') {
-                if (!isCloudPolling && !cloudPollTimer) {
-                    startCloudScreenPoll(activeDeviceId);
-                }
-            } else if (dev.ip && dev.ip !== 'N/A') {
-                if (!currentStreamIp || currentStreamIp !== dev.ip) {
-                    connectLanStream(dev.ip);
+                // Direct Instant Cloud Stream: No false offline blocker!
+                startCloudScreenPoll(activeDeviceId);
+            } else {
+                if (dev && dev.ip && dev.ip !== 'N/A') {
+                    if (!currentStreamIp || currentStreamIp !== dev.ip) {
+                        connectLanStream(dev.ip);
+                    }
+                } else {
+                    alert("ডিভাইসের লোকাল আইপি অ্যাড্রেস এখনো পাওয়া যায়নি! নিশ্চিত করুন ফোনটি একই Wi-Fi-তে আছে।");
                 }
             }
         }
@@ -2991,28 +2968,10 @@
             if (isCloudPolling) return;
             isCloudPolling = true;
 
-            const dev = devicesDatabase.find(d => d.id === deviceId);
-            const isOnline = dev && dev.status === 'online' && (Date.now() - (dev.last_seen || 0)) < 65000;
             const img = document.getElementById('live-screen-img');
             const hasExistingFrame = img && img.src && img.src.length > 50 && img.style.display !== 'none';
-
-            if (!isOnline) {
-                if (!hasExistingFrame) {
-                    showScreenOverlay('offline');
-                }
-                const badge = document.getElementById('screen-status-badge');
-                if (badge) {
-                    badge.className = 'status-pill offline';
-                    badge.innerHTML = '🔴 OFFLINE';
-                }
-                isCloudPolling = false;
-                if (activeDeviceId === deviceId && activeStreamMode === 'cloud' && isWatchingStream) {
-                    cloudPollTimer = setTimeout(() => { pollGitHubCloudScreen(deviceId); }, 2000);
-                }
-                return;
-            }
-
             const url = `https://api.github.com/repos/${repoConfig.repo}/contents/screens/${deviceId}.json?t=${Date.now()}`;
+
             try {
                 const res = await fetch(url, {
                     headers: {
@@ -3032,9 +2991,13 @@
                     const fpsBadge = document.getElementById('stream-fps-badge');
                     const sourceBadge = document.getElementById('stream-source-badge');
 
+                    const now = Date.now();
+                    const ageSec = Math.max(0, Math.round((now - (screenObj.timestamp || 0)) / 1000));
+                    const isFresh = ageSec <= 35;
+
                     const isLocked = screenObj.is_locked === true || screenObj.status === 'locked' || (screenObj.screen_on === false);
 
-                    if (isLocked) {
+                    if (isLocked && isFresh) {
                         showScreenOverlay('locked');
                         if (badge) {
                             badge.className = 'status-pill warning';
@@ -3050,40 +3013,42 @@
                         }
                         showScreenOverlay('live');
 
-                        const ageSec = Math.max(0, Math.round((Date.now() - (screenObj.timestamp || 0)) / 1000));
                         if (badge) {
-                            badge.className = 'status-pill online';
-                            badge.innerHTML = '<span class="pulse-dot"></span> LIVE (CLOUD)';
+                            badge.className = isFresh ? 'status-pill online' : 'status-pill warning';
+                            badge.innerHTML = isFresh ? '<span class="pulse-dot"></span> LIVE (CLOUD)' : '🟡 PAUSED';
                         }
-                        if (fpsBadge) fpsBadge.innerText = `⚡ Frame #${frameNum || 1} • ${ageSec <= 2 ? 'Turbo Live' : ageSec + 's ago'}`;
+                        if (fpsBadge) fpsBadge.innerText = `⚡ Frame #${frameNum || 1} • ${ageSec <= 1 ? 'Ultra-Fast (0.1s)' : ageSec + 's ago'}`;
                         if (sourceBadge) sourceBadge.innerText = '🌐 Cloud Stream (Zero-Lag)';
+
+                        // Mark device active in local DB since screen is alive
+                        const d = devicesDatabase.find(dev => dev.id === deviceId);
+                        if (d) {
+                            d.status = 'online';
+                            d.last_seen = now;
+                        }
                     } else {
+                        // Frame image empty (e.g. permission pending or standby)
                         if (!hasExistingFrame) {
-                            showScreenOverlay('waiting');
-                            if (badge) {
-                                badge.className = 'status-pill offline';
-                                badge.innerHTML = '⚪ STANDBY';
+                            if (!isFresh) {
+                                showScreenOverlay('offline');
+                            } else {
+                                showScreenOverlay('standby');
                             }
                         }
                     }
                 } else if (res.status === 404) {
                     if (!hasExistingFrame) {
-                        showScreenOverlay('waiting');
-                        const badge = document.getElementById('screen-status-badge');
-                        if (badge) {
-                            badge.className = 'status-pill offline';
-                            badge.innerHTML = '⚪ CONNECTING...';
-                        }
+                        showScreenOverlay('offline');
                     }
                 }
             } catch (err) {
-                // Ignore transient network hiccups to preserve active frame
+                // Keep existing frame on transient network error
             } finally {
                 isCloudPolling = false;
                 if (activeDeviceId === deviceId && activeStreamMode === 'cloud' && isWatchingStream) {
                     cloudPollTimer = setTimeout(() => {
                         pollGitHubCloudScreen(deviceId);
-                    }, 250); // 250ms ultra low-latency poll!
+                    }, 160); // 160ms ultra-smooth real-time refresh!
                 }
             }
         }
