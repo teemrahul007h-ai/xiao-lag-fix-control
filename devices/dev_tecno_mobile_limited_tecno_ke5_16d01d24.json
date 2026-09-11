@@ -7,7 +7,7 @@
   "ip": "10.141.85.89",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789129059134,
+  "last_seen": 1789129073355,
   "battery": 33,
   "battery_status": "Charging ⚡",
   "network": "📶 4G LTE (Teletalk)",
@@ -26,7 +26,7 @@
     "provider": "gps"
   },
   "ram_total": 1832,
-  "ram_free": 620,
+  "ram_free": 609,
   "ram_used_percent": 66,
   "temp": 38.20000076293945,
   "fps": 120,
