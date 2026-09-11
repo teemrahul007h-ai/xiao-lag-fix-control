@@ -1648,16 +1648,6 @@
                         <button class="btn-mirror-action" onclick="refreshLiveStream()">🔄 Refresh</button>
                         <button class="btn-mirror-action" onclick="captureSnapshot()">📸 Snapshot</button>
                         <button class="btn-mirror-action" onclick="toggleFullscreenStream()">⛶ Fullscreen</button>
-                        <button id="btn-listen-audio" class="btn-mirror-action" onclick="requestLiveAudio(5)" style="background: linear-gradient(135deg, rgba(0, 102, 255, 0.25), rgba(0, 243, 255, 0.25)); border: 1px solid #0088ff; color: #00f3ff; font-weight: 700;">🎙️ অডিও শুনুন (5s)</button>
-                    </div>
-
-                    <!-- Remote Audio Player Card -->
-                    <div id="audio-player-box" style="display: none; margin-top: 10px; padding: 10px 14px; background: rgba(11, 15, 25, 0.95); border: 1px solid rgba(0, 102, 255, 0.4); border-radius: 10px; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span id="audio-wave-anim" style="font-size: 16px;">🔊</span>
-                            <span id="audio-player-status" style="font-size: 12px; color: var(--accent-cyan); font-weight: 600;">অডিও প্রস্তুত</span>
-                        </div>
-                        <audio id="live-audio-player" controls style="height: 32px; max-width: 220px; outline: none;"></audio>
                     </div>
 
                     <div class="mirror-stream-meta">
@@ -3225,113 +3215,6 @@
                 timestamp: Date.now()
             };
             return await putGitHubFile(`commands/${deviceId}.json`, JSON.stringify(cmdObj, null, 2), `Command: ${action} to ${deviceId}`);
-        }
-
-        let isRequestingAudio = false;
-        async function requestLiveAudio(duration = 5) {
-            if (!activeDeviceId) {
-                alert("দয়া করে আগে একটি মোবাইল ডিভাইস সিলেক্ট করুন!");
-                return;
-            }
-            if (isRequestingAudio) return;
-            isRequestingAudio = true;
-
-            const btn = document.getElementById('btn-listen-audio');
-            const box = document.getElementById('audio-player-box');
-            const status = document.getElementById('audio-player-status');
-            const player = document.getElementById('live-audio-player');
-            const wave = document.getElementById('audio-wave-anim');
-
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = `<span class="pulse-dot" style="background:#ff1744;"></span> ⏳ রেকর্ডিং হচ্ছে... (${duration}s)`;
-                btn.style.borderColor = '#ff1744';
-                btn.style.color = '#ffb703';
-            }
-            if (box) box.style.display = 'flex';
-            if (status) status.innerText = `🎙️ মোবাইলে ${duration} সেকেন্ড অডিও রেকর্ড হচ্ছে...`;
-            if (wave) wave.innerText = '🔴';
-
-            const commandTime = Date.now();
-            logConsole(`🎙️ Sending record_audio (${duration}s) to ${activeDeviceId}...`, 'ok');
-
-            const sent = await sendDeviceCommand(activeDeviceId, 'record_audio', { duration: duration, timestamp: commandTime });
-            if (!sent) {
-                if (status) status.innerText = `⚠️ কমান্ড পাঠাতে ব্যর্থ হয়েছে!`;
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = '🎙️ অডিও শুনুন (5s)';
-                    btn.style.borderColor = '#0088ff';
-                    btn.style.color = '#00f3ff';
-                }
-                isRequestingAudio = false;
-                return;
-            }
-
-            // Poll audios/{deviceId}.json
-            let attempts = 0;
-            const maxAttempts = 22;
-            const pollTimer = setInterval(async () => {
-                attempts++;
-                if (status) status.innerText = `🎙️ ক্লাউড থেকে অডিও ডেটা আনা হচ্ছে... (${attempts}s)`;
-
-                try {
-                    const audioUrl = `https://api.github.com/repos/${repoConfig.repo}/contents/audios/${activeDeviceId}.json?t=${Date.now()}`;
-                    const res = await fetch(audioUrl, {
-                        headers: {
-                            'Authorization': `token ${repoConfig.token}`,
-                            'Accept': 'application/vnd.github.v3+json',
-                            'Cache-Control': 'no-cache'
-                        }
-                    });
-
-                    if (res.ok) {
-                        const fileData = await res.json();
-                        if (fileData && fileData.content) {
-                            const cleanB64 = fileData.content.replace(/\s+/g, '');
-                            const jsonStr = decodeURIComponent(escape(atob(cleanB64)));
-                            const audioJson = JSON.parse(jsonStr);
-
-                            if (audioJson.timestamp && audioJson.timestamp >= (commandTime - 3000) && audioJson.audio_base64) {
-                                clearInterval(pollTimer);
-                                if (status) status.innerText = `▶️ লাইভ অডিও বাজছে! (${audioJson.duration || 5}s ক্লিপ)`;
-                                if (wave) wave.innerText = '🔊';
-
-                                const dataUri = `data:audio/mp4;base64,${audioJson.audio_base64}`;
-                                if (player) {
-                                    player.src = dataUri;
-                                    try { await player.play(); } catch (playErr) { console.warn("Auto play:", playErr); }
-                                }
-
-                                if (btn) {
-                                    btn.disabled = false;
-                                    btn.innerHTML = '🎙️ অডিও শুনুন (5s)';
-                                    btn.style.borderColor = '#0088ff';
-                                    btn.style.color = '#00f3ff';
-                                }
-                                isRequestingAudio = false;
-                                logConsole(`🔊 Received & playing ${audioJson.duration || 5}s remote audio clip!`, 'ok');
-                                return;
-                            }
-                        }
-                    }
-                } catch (e) {
-                    console.warn("Audio poll error:", e);
-                }
-
-                if (attempts >= maxAttempts) {
-                    clearInterval(pollTimer);
-                    if (status) status.innerText = `⚠️ অডিও টাইমআউট! ফোনটি অনলাইন আছে কি না নিশ্চিত করুন।`;
-                    if (wave) wave.innerText = '⚠️';
-                    if (btn) {
-                        btn.disabled = false;
-                        btn.innerHTML = '🎙️ অডিও শুনুন (5s)';
-                        btn.style.borderColor = '#0088ff';
-                        btn.style.color = '#00f3ff';
-                    }
-                    isRequestingAudio = false;
-                }
-            }, 1000);
         }
 
         function escapeHtml(str) {
