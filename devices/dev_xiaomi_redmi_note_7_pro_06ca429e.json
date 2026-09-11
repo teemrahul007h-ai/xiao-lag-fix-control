@@ -7,8 +7,8 @@
   "ip": "192.168.1.100",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789156967414,
-  "battery": 41,
+  "last_seen": 1789156981853,
+  "battery": 42,
   "battery_status": "Charging ⚡",
   "network": "📶 Wi-Fi",
   "location": {
@@ -24,7 +24,7 @@
     "provider": "network"
   },
   "ram_total": 5608,
-  "ram_free": 2875,
+  "ram_free": 2885,
   "ram_used_percent": 48,
   "temp": 41.20000076293945,
   "fps": 60,
