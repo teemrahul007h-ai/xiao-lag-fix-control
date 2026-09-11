@@ -3,5 +3,6 @@
   "action": "instant_boost",
   "payload": {},
   "timestamp": 1789082401686,
-  "executed": false
+  "executed": true,
+  "executed_at": 1789098100855
 }
