@@ -1,0 +1,839 @@
+{
+  "id": "dev_samsung_sc_51c_2af4544e",
+  "name": "SAMSUNG SC-51C",
+  "model": "SC-51C",
+  "manufacturer": "samsung",
+  "imei": "2AF4544E00E9BCD5",
+  "ip": "192.168.0.117",
+  "os": "Android 16 (API 36)",
+  "status": "online",
+  "last_seen": 1789137897906,
+  "battery": 55,
+  "battery_status": "Discharging • Healthy",
+  "network": "📶 Wi-Fi",
+  "location": {
+    "enabled": false,
+    "permission": false,
+    "has_data": false
+  },
+  "ram_total": 7220,
+  "ram_free": 1674,
+  "ram_used_percent": 76,
+  "temp": 42.099998474121094,
+  "fps": 60,
+  "refresh_rate": 60,
+  "guardian_active": true,
+  "screen_sharing": false,
+  "screen_frames": 0,
+  "is_locked": false,
+  "screen_on": true,
+  "lock_status": "unlocked",
+  "apps": [
+    {
+      "name": "Chrome",
+      "pkg": "com.android.chrome",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "docomo phonebook",
+      "pkg": "com.android.contacts",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Settings",
+      "pkg": "com.android.settings",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Play Store",
+      "pkg": "com.android.vending",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Maps",
+      "pkg": "com.google.android.apps.maps",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Messages",
+      "pkg": "com.google.android.apps.messaging",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Meet",
+      "pkg": "com.google.android.apps.tachyon",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Gmail",
+      "pkg": "com.google.android.gm",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "YouTube",
+      "pkg": "com.google.android.youtube",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "+Message",
+      "pkg": "com.nttdocomo.android.msg",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Contacts",
+      "pkg": "com.samsung.android.app.contacts",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Calendar",
+      "pkg": "com.samsung.android.calendar",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Phone",
+      "pkg": "com.samsung.android.dialer",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Secure Folder",
+      "pkg": "com.samsung.knox.securefolder",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Camera",
+      "pkg": "com.sec.android.app.camera",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Gallery",
+      "pkg": "com.sec.android.gallery3d",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Disaster kit",
+      "pkg": "jp.co.nttdocomo.saigaiban",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "bitAIM +",
+      "pkg": "app.ai.lab.bitaimplus",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Lightroom",
+      "pkg": "com.adobe.lrmobile",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Lark Player",
+      "pkg": "com.dywx.larkplayer",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Drive",
+      "pkg": "com.google.android.apps.docs",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Roblox",
+      "pkg": "com.roblox.client",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Tips",
+      "pkg": "com.samsung.android.app.tips",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "One Hand Operation +",
+      "pkg": "com.samsung.android.sidegesturepad",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Snaptube",
+      "pkg": "com.snaptube.premium",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Notepad",
+      "pkg": "com.ztnstudio.notepad",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Osaifu-Keitai",
+      "pkg": "com.felicanetworks.mfm.main",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Gemini",
+      "pkg": "com.google.android.apps.bard",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Google",
+      "pkg": "com.google.android.googlequicksearchbox",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "OneDrive",
+      "pkg": "com.microsoft.skydrive",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Anshin Security",
+      "pkg": "com.nttdocomo.android.anshinsecurity",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "dメニュー",
+      "pkg": "com.nttdocomo.android.dmenu2",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "my daiz",
+      "pkg": "com.nttdocomo.android.mascot",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "SmartNews for docomo",
+      "pkg": "com.nttdocomo.android.mymagazine",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Schedule",
+      "pkg": "com.nttdocomo.android.schedulememo",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "マーケット",
+      "pkg": "com.nttdocomo.android.store",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Reminder",
+      "pkg": "com.samsung.android.app.reminder",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "News",
+      "pkg": "com.samsung.android.app.spage",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Clock",
+      "pkg": "com.sec.android.app.clockpackage",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Radio",
+      "pkg": "com.sec.android.app.fm",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "My Files",
+      "pkg": "com.sec.android.app.myfiles",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Store",
+      "pkg": "com.sec.android.app.samsungapps",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Smart Switch",
+      "pkg": "com.sec.android.easyMover",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "CalcES",
+      "pkg": "advanced.scientific.calculator.calc991.plus",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "NetMirror",
+      "pkg": "app.netmirror.netmirrornew",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "MT Manager",
+      "pkg": "bin.mt.plus",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "𝐹ᴀʀᴀᴢ 𝜬ʟᴀʏᴢ 𝐿ᴀɢ",
+      "pkg": "com.FarazPlayZOfficials",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "APKPure",
+      "pkg": "com.apkpure.aegon",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Attack now",
+      "pkg": "com.appsomniacs.da2",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "MyBL",
+      "pkg": "com.arena.banglalinkmela.app",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "bKash",
+      "pkg": "com.bKash.customerapp",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "YouTube Pro",
+      "pkg": "com.biomes.vanced",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "1.1.1.1",
+      "pkg": "com.cloudflare.onedotonedotonedotone",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "MovieBox",
+      "pkg": "com.community.oneroom",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Aim Carrom",
+      "pkg": "com.cool.aimcarrom",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Discord",
+      "pkg": "com.discord",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Downloader for TikTok",
+      "pkg": "com.downloaderfor.tiktok",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "DRIP WIRE",
+      "pkg": "com.dripclient.wireforge",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Free Fire MAX",
+      "pkg": "com.dts.freefiremax",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Free Fire",
+      "pkg": "com.dts.freefireth",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Facebook",
+      "pkg": "com.facebook.katana",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Messenger",
+      "pkg": "com.facebook.orca",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "DLS26",
+      "pkg": "com.firsttouchgames.dls7",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Assistant",
+      "pkg": "com.google.android.apps.googleassistant",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "HappyMod",
+      "pkg": "com.happymod.apk",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Fomz",
+      "pkg": "com.imendon.fomz",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "imo",
+      "pkg": "com.imo.android.imoim",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Instagram",
+      "pkg": "com.instagram.android",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Root Checker Basic",
+      "pkg": "com.joeykrim.rootcheck",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Nagad",
+      "pkg": "com.konasl.nagad",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "CapCut",
+      "pkg": "com.lemon.lvoverseas",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "ExtremeTour 2.0",
+      "pkg": "com.limited.extremetour",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "KheloBangladesh",
+      "pkg": "com.limited.khelobangladesh",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Copilot",
+      "pkg": "com.microsoft.copilot",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Carrom Disc Pool",
+      "pkg": "com.miniclip.carrom",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Flat Zombies - Cleanup & Defense",
+      "pkg": "com.mokvold.flatzombies_defense_free",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Real Stick Crime",
+      "pkg": "com.nc.real.stickman.crime",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Robot Helicopter",
+      "pkg": "com.nc.robot.helicopter",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Robot Moto Revenge",
+      "pkg": "com.nc.robot.moto.revenge",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Superhero Fly Panda",
+      "pkg": "com.nc.superhero.pands.two",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Snapseed",
+      "pkg": "com.niksoftware.snapseed",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Superhero: Battle for Justice",
+      "pkg": "com.nllc.superhero",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "ChatGPT",
+      "pkg": "com.openai.chatgpt",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Picsart",
+      "pkg": "com.picsart.studio",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Good Lock",
+      "pkg": "com.samsung.android.goodlock",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Wonderland",
+      "pkg": "com.samsung.android.wonderland.wallpaper",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Voice Recorder",
+      "pkg": "com.sec.android.app.voicenote",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "MAME4droid (0.139u1)",
+      "pkg": "com.seleuco.mame4droid",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "GUNSHIP BATTLE",
+      "pkg": "com.theonegames.gunshipbattle",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Auto Clicker",
+      "pkg": "com.truedevelopersstudio.automatictap.autoclicker",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Level Devil",
+      "pkg": "com.unept.leveldevil",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "StreamBox",
+      "pkg": "com.video.app.video_app",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "WhatsApp",
+      "pkg": "com.whatsapp",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Hypic",
+      "pkg": "com.xt.retouchoversea",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "TikTok",
+      "pkg": "com.zhiliaoapp.musically",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Telegram",
+      "pkg": "org.telegram.messenger",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Ridmik",
+      "pkg": "ridmik.keyboard",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "ZArchiver",
+      "pkg": "ru.zdevs.zarchiver",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "XEB TOUR",
+      "pkg": "xebec.lovable.app",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "LockStar",
+      "pkg": "com.samsung.systemui.lockstar",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Lavender",
+      "pkg": "com.samsung.android.filter.effect.lavender",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Android Developer Verifier",
+      "pkg": "com.google.android.verifier",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "CandyCamera",
+      "pkg": "com.candycamera.android.filter.dubai",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "c360lomowarm",
+      "pkg": "com.pinguo.camera360filter.lomowarm",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Sunset",
+      "pkg": "com.samsung.android.filter.effect.sunset",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "RegiStar",
+      "pkg": "com.samsung.android.app.galaxyregistry",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "docomo Application Manager Init.",
+      "pkg": "com.nttdocomo.android.applicationmanagersub",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Home Up",
+      "pkg": "com.samsung.android.app.homestar",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Android System Key Verifier",
+      "pkg": "com.google.android.contactkeys",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Roof",
+      "pkg": "com.samsung.android.filter.effect.roof",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "CandyCamera",
+      "pkg": "com.candycamera.android.filter.tehran",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Module installer",
+      "pkg": "com.ymaa.qigonghealthyjoints",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Deployment service",
+      "pkg": "com.vision.komalihomearts",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Android System SafetyCore",
+      "pkg": "com.google.android.safetycore",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "ClockFace",
+      "pkg": "com.samsung.android.app.clockface",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    }
+  ],
+  "running_apps": []
+}
