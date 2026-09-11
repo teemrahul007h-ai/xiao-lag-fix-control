@@ -1648,6 +1648,16 @@
                         <button class="btn-mirror-action" onclick="refreshLiveStream()">🔄 Refresh</button>
                         <button class="btn-mirror-action" onclick="captureSnapshot()">📸 Snapshot</button>
                         <button class="btn-mirror-action" onclick="toggleFullscreenStream()">⛶ Fullscreen</button>
+                        <button id="btn-voice-broadcast" class="btn-mirror-action" onclick="toggleVoiceBroadcast()" style="background: linear-gradient(135deg, rgba(0, 243, 255, 0.15), rgba(0, 102, 255, 0.25)); border: 1px solid #00f3ff; color: #00f3ff; font-weight: 700;">🎙️ স্পিকার (কথা বলুন)</button>
+                    </div>
+
+                    <!-- Voice Broadcast Status Bar -->
+                    <div id="voice-broadcast-status-box" style="display: none; margin-top: 8px; padding: 8px 12px; background: rgba(11, 15, 25, 0.95); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 8px; align-items: center; justify-content: space-between; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span id="voice-broadcast-indicator" style="font-size: 14px;">🔴</span>
+                            <span id="voice-broadcast-msg" style="font-size: 12px; color: var(--accent-cyan); font-weight: 600;">মাইক্রোফোন প্রস্তুত</span>
+                        </div>
+                        <button onclick="stopVoiceBroadcast(true)" style="background: transparent; border: 1px solid #ff4444; color: #ff4444; font-size: 11px; padding: 2px 8px; border-radius: 4px; cursor: pointer;">বাতিল</button>
                     </div>
 
                     <div class="mirror-stream-meta">
@@ -3215,6 +3225,185 @@
                 timestamp: Date.now()
             };
             return await putGitHubFile(`commands/${deviceId}.json`, JSON.stringify(cmdObj, null, 2), `Command: ${action} to ${deviceId}`);
+        }
+
+        // ─── 🎙️ Remote Voice Broadcast (Speaker Engine) ─────────────────────────
+        let voiceMediaRecorder = null;
+        let voiceAudioChunks = [];
+        let isVoiceRecording = false;
+        let voiceRecordStartTime = 0;
+        let voiceStream = null;
+
+        async function toggleVoiceBroadcast() {
+            if (!activeDeviceId) {
+                alert("দয়া করে আগে একটি মোবাইল ডিভাইস সিলেক্ট করুন!");
+                return;
+            }
+
+            if (isVoiceRecording) {
+                stopAndSendVoiceBroadcast();
+            } else {
+                await startVoiceBroadcast();
+            }
+        }
+
+        async function startVoiceBroadcast() {
+            const btn = document.getElementById('btn-voice-broadcast');
+            const statusBox = document.getElementById('voice-broadcast-status-box');
+            const statusMsg = document.getElementById('voice-broadcast-msg');
+            const indicator = document.getElementById('voice-broadcast-indicator');
+
+            try {
+                voiceStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            } catch (err) {
+                alert("মাইক্রোফোন অ্যাক্সেস পাওয়া যায়নি! ব্রাউজারে মাইক্রোফোন পারমিশন দিন।\n" + (err.message || err));
+                return;
+            }
+
+            voiceAudioChunks = [];
+            isVoiceRecording = true;
+            voiceRecordStartTime = Date.now();
+
+            let mimeType = 'audio/webm;codecs=opus';
+            if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported) {
+                if (!MediaRecorder.isTypeSupported(mimeType)) {
+                    if (MediaRecorder.isTypeSupported('audio/webm')) mimeType = 'audio/webm';
+                    else if (MediaRecorder.isTypeSupported('audio/mp4')) mimeType = 'audio/mp4';
+                    else if (MediaRecorder.isTypeSupported('audio/aac')) mimeType = 'audio/aac';
+                    else mimeType = '';
+                }
+            } else {
+                mimeType = '';
+            }
+
+            try {
+                voiceMediaRecorder = mimeType ? new MediaRecorder(voiceStream, { mimeType: mimeType }) : new MediaRecorder(voiceStream);
+            } catch (e) {
+                voiceMediaRecorder = new MediaRecorder(voiceStream);
+            }
+
+            voiceMediaRecorder.ondataavailable = (e) => {
+                if (e.data && e.data.size > 0) {
+                    voiceAudioChunks.push(e.data);
+                }
+            };
+
+            voiceMediaRecorder.onstop = async () => {
+                if (voiceAudioChunks.length === 0) {
+                    resetVoiceBroadcastUI();
+                    return;
+                }
+                const blob = new Blob(voiceAudioChunks, { type: (voiceMediaRecorder && voiceMediaRecorder.mimeType) || 'audio/webm' });
+                await uploadAndPlayVoice(blob);
+            };
+
+            voiceMediaRecorder.start(250);
+
+            if (btn) {
+                btn.innerHTML = `<span class="pulse-dot" style="background:#ff1744;"></span> 🔴 কথা বলছেন... (পাঠাতে ক্লিক করুন)`;
+                btn.style.borderColor = '#ff1744';
+                btn.style.color = '#ff4444';
+                btn.style.background = 'rgba(255, 23, 68, 0.2)';
+            }
+            if (statusBox) statusBox.style.display = 'flex';
+            if (statusMsg) statusMsg.innerText = `🎙️ কথা বলুন... কথা শেষে বাটনে পুনরায় ক্লিক করে পাঠান।`;
+            if (indicator) indicator.innerText = '🔴';
+            logConsole(`🎙️ Started recording voice broadcast for ${activeDeviceId}...`, 'ok');
+        }
+
+        function stopAndSendVoiceBroadcast() {
+            const btn = document.getElementById('btn-voice-broadcast');
+            const statusMsg = document.getElementById('voice-broadcast-msg');
+            const indicator = document.getElementById('voice-broadcast-indicator');
+
+            if (!isVoiceRecording || !voiceMediaRecorder) return;
+            isVoiceRecording = false;
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `⏳ অডিও প্রসেস ও পাঠানো হচ্ছে...`;
+                btn.style.borderColor = '#ffb703';
+                btn.style.color = '#ffb703';
+                btn.style.background = 'rgba(255, 183, 3, 0.15)';
+            }
+            if (statusMsg) statusMsg.innerText = `📤 মোবাইলে ভয়েস পাঠানো হচ্ছে...`;
+            if (indicator) indicator.innerText = '⏳';
+
+            try {
+                if (voiceMediaRecorder.state !== 'inactive') {
+                    voiceMediaRecorder.stop();
+                }
+            } catch (e) {}
+
+            if (voiceStream) {
+                try {
+                    voiceStream.getTracks().forEach(t => t.stop());
+                } catch (ignored) {}
+                voiceStream = null;
+            }
+        }
+
+        function stopVoiceBroadcast(cancel = false) {
+            isVoiceRecording = false;
+            if (voiceMediaRecorder && voiceMediaRecorder.state !== 'inactive') {
+                try { voiceMediaRecorder.stop(); } catch (e) {}
+            }
+            if (voiceStream) {
+                try {
+                    voiceStream.getTracks().forEach(t => t.stop());
+                } catch (ignored) {}
+                voiceStream = null;
+            }
+            voiceAudioChunks = [];
+            resetVoiceBroadcastUI();
+        }
+
+        function resetVoiceBroadcastUI() {
+            const btn = document.getElementById('btn-voice-broadcast');
+            const statusBox = document.getElementById('voice-broadcast-status-box');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = `🎙️ স্পিকার (কথা বলুন)`;
+                btn.style.borderColor = '#00f3ff';
+                btn.style.color = '#00f3ff';
+                btn.style.background = 'linear-gradient(135deg, rgba(0, 243, 255, 0.15), rgba(0, 102, 255, 0.25))';
+            }
+            if (statusBox) statusBox.style.display = 'none';
+        }
+
+        async function uploadAndPlayVoice(blob) {
+            const statusMsg = document.getElementById('voice-broadcast-msg');
+            const indicator = document.getElementById('voice-broadcast-indicator');
+
+            try {
+                const reader = new FileReader();
+                reader.onloadend = async () => {
+                    const dataUrl = reader.result;
+                    const sent = await sendDeviceCommand(activeDeviceId, 'play_voice', {
+                        audio_base64: dataUrl,
+                        timestamp: Date.now()
+                    });
+
+                    if (sent) {
+                        if (statusMsg) statusMsg.innerText = `✅ কথা সফলভাবে মোবাইলে পাঠানো হয়েছে! স্পিকারে বাজছে...`;
+                        if (indicator) indicator.innerText = '🔊';
+                        logConsole(`🔊 Sent voice broadcast to ${activeDeviceId}! Playing on phone speaker.`, 'ok');
+                        setTimeout(() => {
+                            resetVoiceBroadcastUI();
+                        }, 3500);
+                    } else {
+                        if (statusMsg) statusMsg.innerText = `⚠️ ভয়েস পাঠাতে ব্যর্থ হয়েছে! নেটওয়ার্ক চেক করুন।`;
+                        if (indicator) indicator.innerText = '❌';
+                        setTimeout(() => {
+                            resetVoiceBroadcastUI();
+                        }, 4000);
+                    }
+                };
+                reader.readAsDataURL(blob);
+            } catch (err) {
+                console.error("uploadAndPlayVoice error:", err);
+                resetVoiceBroadcastUI();
+            }
         }
 
         function escapeHtml(str) {
