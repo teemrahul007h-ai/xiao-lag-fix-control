@@ -2068,21 +2068,27 @@
             const hasValidCoords = loc && loc.lat && loc.lng && Number(loc.lat) !== 0 && Number(loc.lng) !== 0;
             const isOnline = dev.status === 'online' && (Date.now() - (dev.last_seen || 0)) < 65000;
             const isLive = hasValidCoords && isOnline && !loc.is_last_known && !loc.is_persisted_cache;
+            const isApprox = hasValidCoords && (loc.is_approximate || loc.provider === 'network_ip');
 
-            const lat = hasValidCoords ? Number(loc.lat) : 23.8103;
-            const lng = hasValidCoords ? Number(loc.lng) : 90.4125;
-            const accuracy = (loc && loc.accuracy) ? loc.accuracy : 15;
+            const lat = hasValidCoords ? Number(loc.lat) : 0;
+            const lng = hasValidCoords ? Number(loc.lng) : 0;
+            const accuracy = (loc && loc.accuracy) ? loc.accuracy : (isApprox ? 2500 : 15);
             const speed = (loc && loc.speed) ? loc.speed : 0;
             const timeStr = (loc && loc.time) ? new Date(loc.time).toLocaleTimeString() : (dev.last_seen ? new Date(dev.last_seen).toLocaleTimeString() : 'Just now');
 
-            if (gmapsBtn && hasValidCoords) {
-                gmapsBtn.href = `https://www.google.com/maps?q=${lat},${lng}`;
-                gmapsBtn.style.opacity = '1';
-                gmapsBtn.style.pointerEvents = 'auto';
+            if (gmapsBtn) {
+                if (hasValidCoords) {
+                    gmapsBtn.href = `https://www.google.com/maps?q=${lat},${lng}`;
+                    gmapsBtn.style.opacity = '1';
+                    gmapsBtn.style.pointerEvents = 'auto';
+                } else {
+                    gmapsBtn.style.opacity = '0.35';
+                    gmapsBtn.style.pointerEvents = 'none';
+                }
             }
 
             // Update UI Badges & Status Text
-            if (isLive) {
+            if (isLive && !isApprox) {
                 if (badge) {
                     badge.className = 'status-pill online';
                     badge.style.borderColor = 'rgba(0, 255, 136, 0.4)';
@@ -2091,15 +2097,35 @@
                 }
                 if (floatingText) {
                     floatingText.style.color = 'var(--accent-green)';
-                    floatingText.innerText = `🟢 LIVE TRACKING • ${speed > 0 ? speed + ' km/h' : 'STATIONARY'}`;
+                    floatingText.innerText = `🟢 LIVE GPS TRACKING • ${speed > 0 ? speed + ' km/h' : 'STATIONARY'}`;
                 }
                 if (floatingDot) floatingDot.style.display = 'inline-block';
                 if (coordsEl) coordsEl.innerText = `${lat.toFixed(5)}°, ${lng.toFixed(5)}°`;
-                if (accEl) accEl.innerText = `±${accuracy} meters (High Precision)`;
+                if (accEl) accEl.innerText = `±${accuracy} meters (High Precision GPS)`;
                 if (speedEl) speedEl.innerText = `${speed} km/h ${speed > 20 ? '🏎️ Driving' : (speed > 2 ? '🚶 Walking' : '🛑 Stationary')}`;
                 if (lastRecEl) {
                     lastRecEl.innerText = `● Live Now (${timeStr})`;
                     lastRecEl.style.color = 'var(--accent-green)';
+                }
+            } else if (hasValidCoords && isApprox) {
+                // IP Geolocation / Network city approximation
+                if (badge) {
+                    badge.className = 'status-pill online';
+                    badge.style.borderColor = 'rgba(157, 78, 221, 0.5)';
+                    badge.style.color = 'var(--accent-purple)';
+                    badge.innerHTML = '🌐 IP / NETWORK AREA';
+                }
+                if (floatingText) {
+                    floatingText.style.color = 'var(--accent-purple)';
+                    floatingText.innerText = `🌐 NETWORK AREA (${loc.city || 'District'}) • Awaiting GPS Lock`;
+                }
+                if (floatingDot) floatingDot.style.display = 'inline-block';
+                if (coordsEl) coordsEl.innerText = `${lat.toFixed(4)}°, ${lng.toFixed(4)}° (${loc.city || 'Area'})`;
+                if (accEl) accEl.innerText = `±${(accuracy/1000).toFixed(1)} km (${loc.city || 'City Level'})`;
+                if (speedEl) speedEl.innerText = `0 km/h (Network Signal)`;
+                if (lastRecEl) {
+                    lastRecEl.innerText = `Network IP Fix: ${timeStr}`;
+                    lastRecEl.style.color = 'var(--accent-purple)';
                 }
             } else if (hasValidCoords) {
                 // Phone is offline or GPS paused, but last location is preserved!
@@ -2122,24 +2148,45 @@
                     lastRecEl.style.color = 'var(--accent-amber)';
                 }
             } else {
-                // No coordinates yet
-                if (badge) {
-                    badge.className = 'status-pill offline';
-                    badge.style.borderColor = 'rgba(255, 23, 68, 0.4)';
-                    badge.style.color = 'var(--accent-red)';
-                    badge.innerHTML = '⚠️ NO GPS FIX';
-                }
-                if (floatingText) {
-                    floatingText.style.color = 'var(--text-muted)';
-                    floatingText.innerText = `🛰️ SEARCHING FOR FIRST GPS FIX...`;
-                }
-                if (floatingDot) floatingDot.style.display = 'none';
-                if (coordsEl) coordsEl.innerText = `Waiting for device GPS...`;
-                if (accEl) accEl.innerText = `Pending Signal`;
-                if (speedEl) speedEl.innerText = `-- km/h`;
-                if (lastRecEl) {
-                    lastRecEl.innerText = `Waiting for phone connection`;
-                    lastRecEl.style.color = 'var(--text-muted)';
+                // No coordinates yet!
+                if (loc && loc.enabled === false) {
+                    if (badge) {
+                        badge.className = 'status-pill offline';
+                        badge.style.borderColor = 'rgba(255, 23, 68, 0.6)';
+                        badge.style.color = 'var(--accent-red)';
+                        badge.innerHTML = '⚠️ GPS বন্ধ (OFF)';
+                    }
+                    if (floatingText) {
+                        floatingText.style.color = 'var(--accent-red)';
+                        floatingText.innerText = `⚠️ ফোনের লোকেশন (GPS) বন্ধ আছে! নোটিফিকেশন বার থেকে Location অন করুন`;
+                    }
+                    if (floatingDot) floatingDot.style.display = 'none';
+                    if (coordsEl) coordsEl.innerText = `ফোনের Location/GPS অফ রয়েছে`;
+                    if (accEl) accEl.innerText = `Settings > Location On`;
+                    if (speedEl) speedEl.innerText = `--`;
+                    if (lastRecEl) {
+                        lastRecEl.innerText = `Turn on GPS in notification shade`;
+                        lastRecEl.style.color = 'var(--accent-red)';
+                    }
+                } else {
+                    if (badge) {
+                        badge.className = 'status-pill offline';
+                        badge.style.borderColor = 'rgba(255, 183, 3, 0.5)';
+                        badge.style.color = 'var(--accent-amber)';
+                        badge.innerHTML = '🛰️ SEARCHING GPS';
+                    }
+                    if (floatingText) {
+                        floatingText.style.color = 'var(--accent-amber)';
+                        floatingText.innerText = `🛰️ রিয়েল GPS স্যাটেলাইট লক খোঁজা হচ্ছে... (ফোনটি খোলা জায়গায় রাখুন)`;
+                    }
+                    if (floatingDot) floatingDot.style.display = 'none';
+                    if (coordsEl) coordsEl.innerText = `স্যাটেলাইট সিগন্যাল সার্চ হচ্ছে...`;
+                    if (accEl) accEl.innerText = `Awaiting Signal...`;
+                    if (speedEl) speedEl.innerText = `-- km/h`;
+                    if (lastRecEl) {
+                        lastRecEl.innerText = `Waiting for device GPS fix`;
+                        lastRecEl.style.color = 'var(--text-muted)';
+                    }
                 }
             }
 
@@ -2166,11 +2213,14 @@
                         subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
                     });
 
+                    const initialViewLat = hasValidCoords ? lat : 23.8103;
+                    const initialViewLng = hasValidCoords ? lng : 90.4125;
+
                     liveMapInstance = L.map('gps-map', {
                         zoomControl: true,
                         attributionControl: false,
                         preferCanvas: true
-                    }).setView([lat, lng], hasValidCoords ? 17 : 13);
+                    }).setView([initialViewLat, initialViewLng], hasValidCoords ? (isApprox ? 13 : 17) : 10);
 
                     if (currentMapLayerType === 'satellite') {
                         mapSatelliteLayer.addTo(liveMapInstance);
@@ -2191,44 +2241,43 @@
 
             if (!liveMapInstance) return;
 
-            // Update Marker and Accuracy Circle
-            const pinColor = isLive ? '#00f3ff' : '#ffb703';
-            const pinBorder = isLive ? '#00ff88' : '#ffffff';
-            const shadowColor = isLive ? '#00f3ff' : '#ffb703';
-
-            const pulseIcon = L.divIcon({
-                className: isLive ? 'custom-gps-pin' : 'custom-gps-pin-offline',
-                html: `<div style="width: 18px; height: 18px; background: ${pinColor}; border: 3px solid ${pinBorder}; border-radius: 50%; box-shadow: 0 0 16px ${shadowColor}, 0 0 32px ${shadowColor};"></div>`,
-                iconSize: [18, 18],
-                iconAnchor: [9, 9]
-            });
-
-            if (!liveMapMarker) {
-                liveMapMarker = L.marker([lat, lng], { icon: pulseIcon }).addTo(liveMapInstance);
-            } else {
-                liveMapMarker.setIcon(pulseIcon);
-                liveMapMarker.setLatLng([lat, lng]);
-            }
-
-            if (!liveMapAccuracyCircle) {
-                liveMapAccuracyCircle = L.circle([lat, lng], {
-                    radius: accuracy,
-                    color: pinColor,
-                    fillColor: pinColor,
-                    fillOpacity: 0.15,
-                    weight: 1.5
-                }).addTo(liveMapInstance);
-            } else {
-                liveMapAccuracyCircle.setLatLng([lat, lng]);
-                liveMapAccuracyCircle.setRadius(accuracy);
-                liveMapAccuracyCircle.setStyle({ color: pinColor, fillColor: pinColor });
-            }
-
-            // Smooth pan / zoom if valid
+            // Update Marker and Accuracy Circle ONLY IF WE HAVE VALID COORDINATES!
             if (hasValidCoords) {
+                const pinColor = isApprox ? '#9d4edd' : (isLive ? '#00f3ff' : '#ffb703');
+                const pinBorder = isApprox ? '#ffffff' : (isLive ? '#00ff88' : '#ffffff');
+                const shadowColor = isApprox ? '#9d4edd' : (isLive ? '#00f3ff' : '#ffb703');
+
+                const pulseIcon = L.divIcon({
+                    className: isLive ? 'custom-gps-pin' : 'custom-gps-pin-offline',
+                    html: `<div style="width: 18px; height: 18px; background: ${pinColor}; border: 3px solid ${pinBorder}; border-radius: 50%; box-shadow: 0 0 16px ${shadowColor}, 0 0 32px ${shadowColor};"></div>`,
+                    iconSize: [18, 18],
+                    iconAnchor: [9, 9]
+                });
+
+                if (!liveMapMarker) {
+                    liveMapMarker = L.marker([lat, lng], { icon: pulseIcon }).addTo(liveMapInstance);
+                } else {
+                    liveMapMarker.setIcon(pulseIcon);
+                    liveMapMarker.setLatLng([lat, lng]);
+                }
+
+                if (!liveMapAccuracyCircle) {
+                    liveMapAccuracyCircle = L.circle([lat, lng], {
+                        radius: accuracy,
+                        color: pinColor,
+                        fillColor: pinColor,
+                        fillOpacity: 0.15,
+                        weight: 1.5
+                    }).addTo(liveMapInstance);
+                } else {
+                    liveMapAccuracyCircle.setLatLng([lat, lng]);
+                    liveMapAccuracyCircle.setRadius(accuracy);
+                    liveMapAccuracyCircle.setStyle({ color: pinColor, fillColor: pinColor });
+                }
+
                 if (isLive) {
                     liveMapInstance.panTo([lat, lng], { animate: true, duration: 0.8 });
-                    if (liveMapTrail) {
+                    if (liveMapTrail && !isApprox) {
                         const existingPoints = liveMapTrail.getLatLngs();
                         const lastPoint = existingPoints.length > 0 ? existingPoints[existingPoints.length - 1] : null;
                         if (!lastPoint || lastPoint.lat !== lat || lastPoint.lng !== lng) {
@@ -2236,7 +2285,17 @@
                         }
                     }
                 } else {
-                    liveMapInstance.setView([lat, lng]);
+                    liveMapInstance.setView([lat, lng], isApprox ? 13 : 16);
+                }
+            } else {
+                // If NO valid coordinates, DO NOT place any fake marker!
+                if (liveMapMarker) {
+                    try { liveMapInstance.removeLayer(liveMapMarker); } catch (e) {}
+                    liveMapMarker = null;
+                }
+                if (liveMapAccuracyCircle) {
+                    try { liveMapInstance.removeLayer(liveMapAccuracyCircle); } catch (e) {}
+                    liveMapAccuracyCircle = null;
                 }
             }
 
