@@ -7,28 +7,19 @@
   "ip": "192.168.0.106",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789123306345,
-  "battery": 8,
+  "last_seen": 1789123384979,
+  "battery": 7,
   "battery_status": "Discharging • Healthy",
-  "network": "📶 Wi-Fi (𝗦𝗔𝗥𝗔ʷⁱᶠⁱ)",
+  "network": "📶 Wi-Fi",
   "location": {
     "enabled": true,
-    "lat": 24.391153,
-    "lng": 88.622332,
-    "accuracy": 3,
-    "speed": 0,
-    "bearing": 82,
-    "altitude": 18,
-    "time": 1789123307000,
-    "has_data": true,
-    "is_live": true,
-    "is_approximate": false,
-    "provider": "gps"
+    "permission": false,
+    "has_data": false
   },
   "ram_total": 1832,
-  "ram_free": 588,
-  "ram_used_percent": 67,
-  "temp": 37.099998474121094,
+  "ram_free": 610,
+  "ram_used_percent": 66,
+  "temp": 37.900001525878906,
   "fps": 120,
   "refresh_rate": 120,
   "guardian_active": true,
@@ -167,7 +158,7 @@
     {
       "name": "HiOS Launcher",
       "pkg": "com.transsion.hilauncher",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
@@ -293,7 +284,7 @@
     {
       "name": "Desh Bangla Keyboard",
       "pkg": "com.bangla.keyboard.for.android",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -307,7 +298,7 @@
     {
       "name": "YouTube",
       "pkg": "com.biomes.vanced",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -342,21 +333,21 @@
     {
       "name": "Discord",
       "pkg": "com.discord",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
     {
       "name": "Facebook",
       "pkg": "com.facebook.katana",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
     {
       "name": "Messenger",
       "pkg": "com.facebook.orca",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -384,7 +375,7 @@
     {
       "name": "WA Business",
       "pkg": "com.whatsapp.w4b",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
