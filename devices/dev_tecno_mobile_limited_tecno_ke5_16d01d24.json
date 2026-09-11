@@ -7,26 +7,26 @@
   "ip": "192.168.0.106",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789122240065,
+  "last_seen": 1789122253957,
   "battery": 11,
   "battery_status": "Discharging • Healthy",
   "network": "📶 Wi-Fi (𝗦𝗔𝗥𝗔ʷⁱᶠⁱ)",
   "location": {
     "enabled": true,
-    "lat": 24.39109,
+    "lat": 24.391112,
     "lng": 88.622267,
     "accuracy": 4,
     "speed": 0,
     "bearing": 299,
     "altitude": -6,
-    "time": 1789122240000,
+    "time": 1789122254000,
     "has_data": true,
     "is_live": true,
     "is_approximate": false,
     "provider": "gps"
   },
   "ram_total": 1832,
-  "ram_free": 658,
+  "ram_free": 648,
   "ram_used_percent": 64,
   "temp": 38.70000076293945,
   "fps": 120,
@@ -55,21 +55,21 @@
     {
       "name": "Settings",
       "pkg": "com.android.settings",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Play Store",
       "pkg": "com.android.vending",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
     {
       "name": "AI Gallery",
       "pkg": "com.gallery20",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
@@ -90,14 +90,14 @@
     {
       "name": "Maps",
       "pkg": "com.google.android.apps.maps",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Messages",
       "pkg": "com.google.android.apps.messaging",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
@@ -111,7 +111,7 @@
     {
       "name": "Meet",
       "pkg": "com.google.android.apps.tachyon",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
@@ -132,21 +132,21 @@
     {
       "name": "YouTube",
       "pkg": "com.google.android.youtube",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Weather",
       "pkg": "com.rlk.weathers",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Phone",
       "pkg": "com.sh.smart.caller",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
@@ -174,14 +174,14 @@
     {
       "name": "Notepad",
       "pkg": "com.transsion.notebook",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Sound Recorder",
       "pkg": "com.transsion.soundrecorder",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
@@ -202,7 +202,7 @@
     {
       "name": "Tether",
       "pkg": "com.tplink.tether",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -216,7 +216,7 @@
     {
       "name": "SIM Toolkit",
       "pkg": "com.android.stk",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
@@ -265,7 +265,7 @@
     {
       "name": "Phone Master",
       "pkg": "com.transsion.phonemaster",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": true
     },
@@ -279,7 +279,7 @@
     {
       "name": "upay",
       "pkg": "bd.com.upay.customer",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -300,7 +300,7 @@
     {
       "name": "Binance",
       "pkg": "com.binance.dev",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -314,21 +314,21 @@
     {
       "name": "MovieBox",
       "pkg": "com.community.oneroom",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
     {
       "name": "Rocket",
       "pkg": "com.dbbl.mbs.apps.main",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
     {
       "name": "NexusPay",
       "pkg": "com.dbbl.nexus.pay",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -377,7 +377,7 @@
     {
       "name": "QR Scanner",
       "pkg": "com.teacapps.barcodescanner",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -398,28 +398,28 @@
     {
       "name": "Remote Desktop",
       "pkg": "org.chromium.webapk.ac1e4552e330c9db5_v2",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
     {
       "name": "Telegram",
       "pkg": "org.telegram.messenger",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
     {
       "name": "Telegram",
       "pkg": "org.telegram.premium",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
     {
       "name": "My Teletalk",
       "pkg": "teletalk.teletalkcustomerapp",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
