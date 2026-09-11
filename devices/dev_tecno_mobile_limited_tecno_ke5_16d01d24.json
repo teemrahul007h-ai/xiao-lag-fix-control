@@ -7,7 +7,7 @@
   "ip": "192.168.0.106",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789122429467,
+  "last_seen": 1789122430609,
   "battery": 10,
   "battery_status": "Discharging • Healthy",
   "network": "📶 Wi-Fi (𝗦𝗔𝗥𝗔ʷⁱᶠⁱ)",
@@ -26,7 +26,7 @@
     "provider": "gps"
   },
   "ram_total": 1832,
-  "ram_free": 687,
+  "ram_free": 693,
   "ram_used_percent": 62,
   "temp": 38.5,
   "fps": 120,
