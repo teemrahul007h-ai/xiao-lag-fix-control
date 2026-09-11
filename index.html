@@ -2121,9 +2121,14 @@
                     floatingText.innerText = `🟢 LIVE GPS TRACKING • ${speed > 0 ? speed + ' km/h' : 'STATIONARY'}`;
                 }
                 if (floatingDot) floatingDot.style.display = 'inline-block';
-                if (coordsEl) coordsEl.innerText = `${lat.toFixed(5)}°, ${lng.toFixed(5)}°`;
+                let movementMode = '🛑 Stationary';
+                if (speed > 25) movementMode = '🏎️ Driving / Bus';
+                else if (speed > 8) movementMode = '🚴 Cycling / Bike';
+                else if (speed > 1) movementMode = '🚶 Walking';
+
+                if (coordsEl) coordsEl.innerText = `${lat.toFixed(6)}°, ${lng.toFixed(6)}°${loc.bearing ? ' • 🧭 ' + loc.bearing + '°' : ''}`;
                 if (accEl) accEl.innerText = `±${accuracy} meters (High Precision GPS)`;
-                if (speedEl) speedEl.innerText = `${speed} km/h ${speed > 20 ? '🏎️ Driving' : (speed > 2 ? '🚶 Walking' : '🛑 Stationary')}`;
+                if (speedEl) speedEl.innerText = `${speed} km/h • ${movementMode}`;
                 if (lastRecEl) {
                     lastRecEl.innerText = `● Live Now (${timeStr})`;
                     lastRecEl.style.color = 'var(--accent-green)';
