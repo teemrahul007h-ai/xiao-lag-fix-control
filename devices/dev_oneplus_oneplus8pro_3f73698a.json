@@ -1,0 +1,237 @@
+{
+  "id": "dev_oneplus_oneplus8pro_3f73698a",
+  "name": "ONEPLUS OnePlus8Pro",
+  "model": "OnePlus8Pro",
+  "manufacturer": "OnePlus",
+  "imei": "3F73698A53B56D46",
+  "ip": "192.168.97.2",
+  "os": "Android 11 (API 30)",
+  "status": "online",
+  "last_seen": 1789130792566,
+  "battery": 85,
+  "battery_status": "Charging ⚡",
+  "network": "📶 4G LTE (T-Mobile - US)",
+  "location": {
+    "enabled": true,
+    "lat": 38.899162,
+    "lng": -77.037745,
+    "accuracy": 0,
+    "speed": 0,
+    "time": 0,
+    "has_data": true,
+    "is_live": true,
+    "is_approximate": false,
+    "provider": "passive"
+  },
+  "ram_total": 4179,
+  "ram_free": 2253,
+  "ram_used_percent": 46,
+  "temp": 35,
+  "fps": 60,
+  "refresh_rate": 60,
+  "guardian_active": true,
+  "screen_sharing": false,
+  "screen_frames": 0,
+  "is_locked": false,
+  "screen_on": true,
+  "lock_status": "unlocked",
+  "apps": [
+    {
+      "name": "Camera",
+      "pkg": "com.android.camera2",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Chrome",
+      "pkg": "com.android.chrome",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Phone",
+      "pkg": "com.android.dialer",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Settings",
+      "pkg": "com.android.settings",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Play Store",
+      "pkg": "com.android.vending",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Drive",
+      "pkg": "com.google.android.apps.docs",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Maps",
+      "pkg": "com.google.android.apps.maps",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Messages",
+      "pkg": "com.google.android.apps.messaging",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Photos",
+      "pkg": "com.google.android.apps.photos",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Duo",
+      "pkg": "com.google.android.apps.tachyon",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "YT Music",
+      "pkg": "com.google.android.apps.youtube.music",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Calculator",
+      "pkg": "com.google.android.calculator",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Calendar",
+      "pkg": "com.google.android.calendar",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Contacts",
+      "pkg": "com.google.android.contacts",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Clock",
+      "pkg": "com.google.android.deskclock",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Gmail",
+      "pkg": "com.google.android.gm",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Google Play Movies & TV",
+      "pkg": "com.google.android.videos",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "YouTube",
+      "pkg": "com.google.android.youtube",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Files",
+      "pkg": "com.android.documentsui",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "SIM Toolkit",
+      "pkg": "com.android.stk",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Google",
+      "pkg": "com.google.android.googlequicksearchbox",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "Keep Notes",
+      "pkg": "com.google.android.keep",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "PsychicMonkey",
+      "pkg": "com.syntheticsoft.telecomm",
+      "selected": false,
+      "locked": false,
+      "is_system": true
+    },
+    {
+      "name": "com.google.android.apps.auth.test.support",
+      "pkg": "com.google.android.apps.auth.test.support",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "location.services",
+      "pkg": "location.services",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "android.support.multidex.MultiDexApplication",
+      "pkg": "com.google.wireless.qa.mobileharness.tool.android.account",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "AndroidX Crawler",
+      "pkg": "androidx.test.tools.crawler",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Stub App for AndroidX Crawler",
+      "pkg": "androidx.test.tools.crawler.stubapp",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    }
+  ],
+  "running_apps": []
+}
