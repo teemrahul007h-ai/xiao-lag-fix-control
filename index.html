@@ -1477,18 +1477,15 @@
         <div class="brand-box">
             <div>
                 <div class="brand-title"><span class="white">XIAO </span><span class="red">TRG</span></div>
-                <div class="brand-sub">Multi-Device Fleet Command Center</div>
+                <div class="brand-sub">&lt;/&gt; RAHUL EXE</div>
             </div>
         </div>
 
         <div class="header-actions">
             <div class="global-badge" id="sync-status-badge">
                 <span class="pulse-dot"></span>
-                <span id="sync-status-text">GITHUB SYNC ONLINE</span>
+                <span id="sync-status-text">ONLINE</span>
             </div>
-            <button class="btn-config" onclick="openConfigModal()">
-                <span>⚙️ GITHUB SYNC</span>
-            </button>
         </div>
     </header>
 
@@ -1613,7 +1610,7 @@
                     <!-- Stream Mode Switcher -->
                     <div style="display: flex; gap: 6px; margin-top: 10px;">
                         <button id="btn-mode-cloud" class="btn-mirror-action" onclick="switchStreamMode('cloud')" style="background: rgba(0, 243, 255, 0.15); border-color: var(--accent-cyan); color: var(--accent-cyan);">
-                            🌐 GITHUB CLOUD (Anywhere)
+                            🌐 CLOUD STREAM (Anywhere)
                         </button>
                         <button id="btn-mode-lan" class="btn-mirror-action" onclick="switchStreamMode('lan')">
                             ⚡ LOCAL LAN
@@ -1628,7 +1625,7 @@
                     </div>
                     <div class="mirror-stream-meta">
                         <span id="stream-fps-badge">⚡ Status: Waiting...</span>
-                        <span id="stream-source-badge">🌐 Source: GitHub Cloud</span>
+                        <span id="stream-source-badge">🌐 Source: Cloud Stream</span>
                     </div>
                     <div id="cellular-mode-notice" style="display: none; margin-top: 10px; font-size: 11.5px; padding: 7px 12px; background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 8px; color: var(--accent-cyan); font-weight: 600; text-align: center;">
                         🌐 Mobile Data Active • Worldwide Cloud Stream Locked (100% Reliable)
@@ -1767,24 +1764,24 @@
         </div>
     </main>
 
-    <!-- ── Modal: GitHub Config ──────────────────────────────── -->
+    <!-- ── Modal: Cloud Config ──────────────────────────────── -->
     <div class="modal-overlay" id="config-modal">
         <div class="modal-card">
-            <div class="modal-title">⚙️ GITHUB REPOSITORY SYNC</div>
+            <div class="modal-title">⚙️ CLOUD DATA SYNC</div>
             <p style="font-size: 13px; color: var(--text-muted);">
-                GitHub Repository & Token are pre-configured. You can modify them here if you ever switch repositories.
+                Cloud Repository &amp; Token are pre-configured. You can modify them here if you ever switch repositories.
             </p>
             <div class="modal-input-group">
-                <label class="modal-input-label">Repository (e.g. username/repo-name)</label>
+                <label class="modal-input-label">Repository</label>
                 <input type="text" id="gh-repo" class="modal-input">
             </div>
             <div class="modal-input-group">
-                <label class="modal-input-label">Personal Access Token (PAT - ghp_...)</label>
+                <label class="modal-input-label">Access Key (Token)</label>
                 <input type="password" id="gh-token" class="modal-input">
             </div>
             <div class="modal-actions">
                 <button class="btn-back" onclick="closeConfigModal()">CANCEL</button>
-                <button class="btn-send" onclick="saveGitHubConfig()">SAVE & RECONNECT</button>
+                <button class="btn-send" onclick="saveGitHubConfig()">SAVE &amp; RECONNECT</button>
             </div>
         </div>
     </div>
@@ -1852,6 +1849,25 @@
             }));
         }
 
+        function updateHeaderOnlineStatus(isOnline) {
+            const text = document.getElementById('sync-status-text');
+            const badge = document.getElementById('sync-status-badge');
+            if (text) text.innerText = isOnline ? 'ONLINE' : 'OFFLINE';
+            if (badge) {
+                if (isOnline) {
+                    badge.style.borderColor = 'rgba(0, 255, 136, 0.4)';
+                    badge.style.color = 'var(--accent-green)';
+                    const dot = badge.querySelector('.pulse-dot');
+                    if (dot) dot.style.background = 'var(--accent-green)';
+                } else {
+                    badge.style.borderColor = 'rgba(255, 23, 68, 0.5)';
+                    badge.style.color = 'var(--accent-red)';
+                    const dot = badge.querySelector('.pulse-dot');
+                    if (dot) dot.style.background = 'var(--accent-red)';
+                }
+            }
+        }
+
         // Fetch Fleet from GitHub API (Parallel + SHA-Cached for Ultra-Low Latency)
         async function fetchFleetFromGitHub() {
             if (isPolling) return;
@@ -1867,6 +1883,7 @@
                 });
 
                 if (res.status === 200) {
+                    updateHeaderOnlineStatus(true);
                     const files = await res.json();
                     
                     const devicePromises = files
@@ -1923,10 +1940,14 @@
                         showWaitingBanner();
                     }
                 } else if (res.status === 404 && devicesDatabase.length === 0) {
+                    updateHeaderOnlineStatus(true);
                     showWaitingBanner();
+                } else {
+                    updateHeaderOnlineStatus(false);
                 }
             } catch (err) {
-                console.error("GitHub Sync error:", err);
+                updateHeaderOnlineStatus(false);
+                console.error("Cloud Sync error:", err);
             } finally {
                 isPolling = false;
             }
@@ -2372,10 +2393,10 @@
         async function deleteDeviceFromGitHub(deviceId, devName) {
             if (!deviceId) return;
             const nameStr = devName || deviceId;
-            const confirmed = confirm(`⚠️ আপনি কি নিশ্চিত যে [${nameStr}] ডিভাইসটি ড্যাশবোর্ড ও গিটহাব ক্লাউড থেকে চিরতরে মুছে ফেলতে চান?\n\n(ফোন থেকে অ্যাপ আনইনস্টল করা থাকলে বা ডিলিট করতে চাইলে OK চাপুন)`);
+            const confirmed = confirm(`⚠️ আপনি কি নিশ্চিত যে [${nameStr}] ডিভাইসটি ড্যাশবোর্ড ও ক্লাউড থেকে চিরতরে মুছে ফেলতে চান?\n\n(ফোন থেকে অ্যাপ আনইনস্টল করা থাকলে বা ডিলিট করতে চাইলে OK চাপুন)`);
             if (!confirmed) return;
 
-            logConsole(`Deleting device [${nameStr}] from GitHub cloud...`, 'warn');
+            logConsole(`Deleting device [${nameStr}] from cloud...`, 'warn');
 
             // 1. Delete cloud files asynchronously
             await deleteGitHubFile(`devices/${deviceId}.json`, `Purge uninstalled device: ${deviceId}`);
@@ -2403,7 +2424,7 @@
             }
 
             renderFleetGrid();
-            logConsole(`✅ Device [${nameStr}] permanently deleted from dashboard & GitHub!`, 'ok');
+            logConsole(`✅ Device [${nameStr}] permanently deleted!`, 'ok');
         }
 
         // Bulk Clean All Inactive / Uninstalled Devices
@@ -2671,18 +2692,18 @@
                     btnCloud.style.background = 'rgba(0, 243, 255, 0.2)';
                     btnCloud.style.borderColor = 'var(--accent-cyan)';
                     btnCloud.style.color = 'var(--accent-cyan)';
-                    btnCloud.innerHTML = '🌐 GITHUB CLOUD (Active • 4G/5G Cellular)';
+                    btnCloud.innerHTML = '🌐 CLOUD STREAM (Active • 4G/5G Cellular)';
                 }
                 if (btnLan) {
                     btnLan.style.background = 'rgba(255, 255, 255, 0.04)';
                     btnLan.style.borderColor = 'rgba(255, 255, 255, 0.08)';
                     btnLan.style.color = 'var(--text-muted)';
-                    btnLan.title = 'LAN stream requires phone & PC to be on the same Wi-Fi. Mobile Data uses GitHub Cloud Stream.';
+                    btnLan.title = 'LAN stream requires phone & PC to be on the same Wi-Fi. Mobile Data uses Cloud Stream.';
                 }
             } else {
                 if (noticeEl) noticeEl.style.display = 'none';
                 if (btnCloud) {
-                    btnCloud.innerHTML = '🌐 GITHUB CLOUD (Anywhere)';
+                    btnCloud.innerHTML = '🌐 CLOUD STREAM (Anywhere)';
                 }
             }
 
@@ -2928,7 +2949,7 @@
                             badge.innerHTML = '<span class="pulse-dot"></span> LIVE (CLOUD)';
                         }
                         if (fpsBadge) fpsBadge.innerText = `⚡ Frame #${frameNum || 1} • ${ageSec <= 2 ? 'Live (Real-time)' : ageSec + 's ago'}`;
-                        if (sourceBadge) sourceBadge.innerText = '🌐 GitHub Cloud (Zero-Lag)';
+                        if (sourceBadge) sourceBadge.innerText = '🌐 Cloud Stream (Zero-Lag)';
                     } else {
                         if (!hasExistingFrame) {
                             showScreenOverlay('waiting');
@@ -3040,7 +3061,7 @@
             }
             if (activeStreamMode === 'cloud') {
                 if (activeDeviceId) {
-                    logConsole(`Refreshing GitHub Cloud screen for ${activeDeviceId}...`, 'ok');
+                    logConsole(`Refreshing Cloud screen for ${activeDeviceId}...`, 'ok');
                     startCloudScreenPoll(activeDeviceId);
                 }
             } else {
@@ -3137,7 +3158,7 @@
             localStorage.setItem('xiao_gh_repo', repo);
             localStorage.setItem('xiao_gh_token', token);
             closeConfigModal();
-            logConsole(`GitHub Repository Linked: ${repo}`, 'ok');
+            logConsole(`Cloud Server Linked: ${repo}`, 'ok');
             fetchFleetFromGitHub();
         }
 
@@ -3151,10 +3172,10 @@
             }
 
             if (!repoConfig.token) {
-                logConsole(`Welcome to XIAO Fleet Control Center. Please enter your GitHub Token.`, 'warn');
+                logConsole(`Welcome to XIAO Fleet Control Center. Initializing...`, 'warn');
                 openConfigModal();
             } else {
-                logConsole(`Connecting to GitHub Repo: ${repoConfig.repo}...`, 'ok');
+                logConsole(`Connecting to Cloud Server...`, 'ok');
                 fetchFleetFromGitHub();
             }
 
