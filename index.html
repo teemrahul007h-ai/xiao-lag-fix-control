@@ -249,6 +249,91 @@
             color: var(--text-white);
         }
 
+        .btn-filter-pill {
+            background: rgba(0, 243, 255, 0.12);
+            border: 1px solid rgba(0, 243, 255, 0.35);
+            color: var(--accent-cyan);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-filter-pill:hover {
+            background: rgba(0, 243, 255, 0.25);
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.3);
+        }
+        .btn-filter-pill.show-all-mode {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.25);
+            color: var(--text-white);
+        }
+
+        .btn-purge-devices {
+            background: rgba(255, 23, 68, 0.12);
+            border: 1px solid rgba(255, 23, 68, 0.35);
+            color: #ff5252;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-purge-devices:hover {
+            background: rgba(255, 23, 68, 0.25);
+            box-shadow: 0 0 12px rgba(255, 23, 68, 0.4);
+        }
+
+        .btn-card-del {
+            background: rgba(255, 23, 68, 0.12);
+            border: 1px solid rgba(255, 23, 68, 0.35);
+            color: #ff8a80;
+            border-radius: 6px;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-card-del:hover {
+            background: #ff1744;
+            color: #ffffff;
+            border-color: #ff1744;
+            box-shadow: 0 0 10px rgba(255, 23, 68, 0.5);
+        }
+
+        .btn-delete-device-top {
+            background: rgba(255, 23, 68, 0.12);
+            border: 1px solid rgba(255, 23, 68, 0.4);
+            color: #ff5252;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-delete-device-top:hover {
+            background: #ff1744;
+            color: #ffffff;
+            border-color: #ff1744;
+            box-shadow: 0 0 14px rgba(255, 23, 68, 0.6);
+        }
+
         /* Device Grid */
         .device-grid {
             display: grid;
@@ -1419,9 +1504,14 @@
                     <span>📱 CONNECTED DEVICES</span>
                 </div>
                 <div class="fleet-stats-bar">
-                    <div class="stat-item">Total Devices: <strong id="total-devices-count">0</strong></div>
+                    <div class="stat-item">Total: <strong id="total-devices-count">0</strong></div>
                     <div class="stat-item" style="color: var(--accent-green);">Online: <strong id="online-devices-count">0</strong></div>
-                    <div class="stat-item" style="color: var(--accent-cyan);">Zero-Lag Active: <strong>100%</strong></div>
+                    <button id="btn-filter-active" class="btn-filter-pill" onclick="toggleHideInactive()" title="হাইড বা প্রদর্শন করুন">
+                        <span id="filter-active-icon">🟢</span> <span id="filter-active-text">Active Only</span>
+                    </button>
+                    <button class="btn-purge-devices" onclick="bulkPurgeInactiveDevices()" title="১০ মিনিটের বেশি অফলাইন বা আনইনস্টল ডিভাইসগুলো মুছে ফেলুন">
+                        <span>🧹 Clean Inactive</span>
+                    </button>
                 </div>
             </div>
 
@@ -1435,9 +1525,14 @@
         <!-- ══════════════════════════════════════════════════════ -->
         <div id="detail-view">
             <div class="detail-top-nav">
-                <button class="btn-back" onclick="switchToFleetView()">
-                    <span>⬅️ BACK TO ALL DEVICES</span>
-                </button>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button class="btn-back" onclick="switchToFleetView()">
+                        <span>⬅️ BACK TO ALL DEVICES</span>
+                    </button>
+                    <button class="btn-delete-device-top" onclick="deleteDeviceFromGitHub(activeDeviceId)" title="ফোন থেকে অ্যাপ আনইনস্টল করলে ক্লাউড ও ড্যাশবোর্ড থেকে চিরতরে মুছে ফেলুন">
+                        <span>🗑️ DELETE UNINSTALLED DEVICE</span>
+                    </button>
+                </div>
                 <div class="detail-device-header">
                     <div class="detail-device-title" id="active-device-name">DEVICE</div>
                     <div class="status-pill online" id="active-device-status">
@@ -1534,6 +1629,9 @@
                     <div class="mirror-stream-meta">
                         <span id="stream-fps-badge">⚡ Status: Waiting...</span>
                         <span id="stream-source-badge">🌐 Source: GitHub Cloud</span>
+                    </div>
+                    <div id="cellular-mode-notice" style="display: none; margin-top: 10px; font-size: 11.5px; padding: 7px 12px; background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 8px; color: var(--accent-cyan); font-weight: 600; text-align: center;">
+                        🌐 Mobile Data Active • Worldwide Cloud Stream Locked (100% Reliable)
                     </div>
                 </div>
 
@@ -2148,8 +2246,142 @@
             });
         }
 
+        // ── Inactive & Uninstalled Device Management ──
+        let hideInactiveDevices = localStorage.getItem('xiao_hide_inactive') !== 'false'; // Default: Active Only
+
+        function toggleHideInactive() {
+            hideInactiveDevices = !hideInactiveDevices;
+            try {
+                localStorage.setItem('xiao_hide_inactive', hideInactiveDevices ? 'true' : 'false');
+            } catch(e) {}
+            updateFilterButtonUI();
+            renderFleetGrid();
+        }
+
+        function updateFilterButtonUI() {
+            const btn = document.getElementById('btn-filter-active');
+            const icon = document.getElementById('filter-active-icon');
+            const text = document.getElementById('filter-active-text');
+            if (!btn) return;
+            if (hideInactiveDevices) {
+                btn.className = 'btn-filter-pill';
+                if (icon) icon.innerText = '🟢';
+                if (text) text.innerText = 'Active Only (হাইড আনইনস্টল)';
+            } else {
+                btn.className = 'btn-filter-pill show-all-mode';
+                if (icon) icon.innerText = '⚪';
+                if (text) text.innerText = 'Show All (সকল ডিভাইস)';
+            }
+        }
+
+        // Delete File Directly from GitHub REST API
+        async function deleteGitHubFile(filePath, commitMsg) {
+            try {
+                const getUrl = `https://api.github.com/repos/${repoConfig.repo}/contents/${filePath}?t=${Date.now()}`;
+                const res = await fetch(getUrl, {
+                    headers: {
+                        'Authorization': `token ${repoConfig.token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                if (res.status === 200) {
+                    const data = await res.json();
+                    const sha = data.sha;
+                    if (sha) {
+                        const delRes = await fetch(getUrl, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': `token ${repoConfig.token}`,
+                                'Accept': 'application/vnd.github.v3+json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: commitMsg,
+                                sha: sha
+                            })
+                        });
+                        return delRes.status === 200 || delRes.status === 204;
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to delete file:", filePath, e);
+            }
+            return false;
+        }
+
+        // 1-Click Permanently Remove Uninstalled Device
+        async function deleteDeviceFromGitHub(deviceId, devName) {
+            if (!deviceId) return;
+            const nameStr = devName || deviceId;
+            const confirmed = confirm(`⚠️ আপনি কি নিশ্চিত যে [${nameStr}] ডিভাইসটি ড্যাশবোর্ড ও গিটহাব ক্লাউড থেকে চিরতরে মুছে ফেলতে চান?\n\n(ফোন থেকে অ্যাপ আনইনস্টল করা থাকলে বা ডিলিট করতে চাইলে OK চাপুন)`);
+            if (!confirmed) return;
+
+            logConsole(`Deleting device [${nameStr}] from GitHub cloud...`, 'warn');
+
+            // 1. Delete cloud files asynchronously
+            await deleteGitHubFile(`devices/${deviceId}.json`, `Purge uninstalled device: ${deviceId}`);
+            await deleteGitHubFile(`screens/${deviceId}.json`, `Purge screen data: ${deviceId}`);
+            await deleteGitHubFile(`commands/${deviceId}.json`, `Purge commands: ${deviceId}`);
+
+            // 2. Remove from memory database and localStorage
+            devicesDatabase = devicesDatabase.filter(d => d.id !== deviceId);
+            try {
+                localStorage.setItem('xiao_cached_devices', JSON.stringify(devicesDatabase));
+                localStorage.removeItem('xiao_last_loc_' + deviceId);
+                if (fileShaCache && fileShaCache[deviceId + '.json']) {
+                    delete fileShaCache[deviceId + '.json'];
+                    localStorage.setItem('xiao_file_sha_cache', JSON.stringify(fileShaCache));
+                }
+            } catch (e) {}
+
+            // 3. Remove device card immediately from DOM
+            const card = document.querySelector(`[data-device-id="${deviceId}"]`);
+            if (card) card.remove();
+
+            // 4. Switch back to fleet view if currently in details view of this device
+            if (activeDeviceId === deviceId) {
+                switchToFleetView();
+            }
+
+            renderFleetGrid();
+            logConsole(`✅ Device [${nameStr}] permanently deleted from dashboard & GitHub!`, 'ok');
+        }
+
+        // Bulk Clean All Inactive / Uninstalled Devices
+        async function bulkPurgeInactiveDevices() {
+            const now = Date.now();
+            const inactiveDevices = devicesDatabase.filter(d => (now - (d.last_seen || 0)) > 10 * 60 * 1000);
+            if (inactiveDevices.length === 0) {
+                alert("কোনো নিষ্ক্রিয় বা আনইনস্টল হওয়া ডিভাইস পাওয়া যায়নি (সকল ডিভাইস অ্যাক্টিভ)!");
+                return;
+            }
+
+            const confirmed = confirm(`⚠️ ${inactiveDevices.length}টি অফলাইন/আনইনস্টল ডিভাইস পাওয়া গেছে।\nআপনি কি এই সমস্ত নিষ্ক্রিয় ডিভাইস একসাথে গিটহাব ক্লাউড থেকে ডিলিট করতে চান?`);
+            if (!confirmed) return;
+
+            logConsole(`Bulk purging ${inactiveDevices.length} inactive devices...`, 'warn');
+            for (const dev of inactiveDevices) {
+                await deleteGitHubFile(`devices/${dev.id}.json`, `Bulk purge uninstalled device: ${dev.id}`);
+                await deleteGitHubFile(`screens/${dev.id}.json`, `Bulk purge screen: ${dev.id}`);
+                await deleteGitHubFile(`commands/${dev.id}.json`, `Bulk purge commands: ${dev.id}`);
+                localStorage.removeItem('xiao_last_loc_' + dev.id);
+                if (fileShaCache) delete fileShaCache[dev.id + '.json'];
+            }
+
+            devicesDatabase = devicesDatabase.filter(d => (now - (d.last_seen || 0)) <= 10 * 60 * 1000);
+            try {
+                localStorage.setItem('xiao_cached_devices', JSON.stringify(devicesDatabase));
+                localStorage.setItem('xiao_file_sha_cache', JSON.stringify(fileShaCache));
+            } catch (e) {}
+
+            renderFleetGrid();
+            logConsole(`✅ Bulk purge complete! ${inactiveDevices.length} devices deleted.`, 'ok');
+        }
+
         // Render All Device Cards (In-Place DOM Updating for Zero-Lag Mobile Performance)
         function renderFleetGrid() {
+            updateFilterButtonUI();
+
             if (devicesDatabase.length === 0) {
                 showWaitingBanner();
                 return;
@@ -2159,18 +2391,44 @@
             const waitingBanner = container.querySelector('.waiting-banner');
             if (waitingBanner) container.innerHTML = '';
 
-            const activeIds = new Set(devicesDatabase.map(d => d.id));
+            const now = Date.now();
+            const visibleDevices = hideInactiveDevices
+                ? devicesDatabase.filter(dev => (now - (dev.last_seen || 0)) <= 10 * 60 * 1000)
+                : devicesDatabase;
 
-            // Clean up old disconnected devices if any
+            if (visibleDevices.length === 0 && devicesDatabase.length > 0) {
+                container.innerHTML = `
+                    <div class="waiting-banner" style="grid-column: 1 / -1; background: rgba(16, 21, 33, 0.85); border: 1px dashed var(--accent-amber); border-radius: 16px; padding: 35px; text-align: center;">
+                        <div style="font-size: 38px; margin-bottom: 12px;">📱💤</div>
+                        <h3 style="font-family: var(--font-display); color: var(--accent-amber); margin-bottom: 8px;">ALL DEVICES ARE INACTIVE OR UNINSTALLED</h3>
+                        <p style="color: var(--text-muted); font-size: 13px; max-width: 550px; margin: 0 auto 16px auto; line-height: 1.6;">
+                            যেসব ফোন ১০ মিনিটের বেশি অফলাইন বা অ্যাপ আনইনস্টল করা হয়েছে সেগুলো অটো-হাইড রয়েছে। দেখতে নিচের বাটনে ক্লিক করুন:
+                        </p>
+                        <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn-filter-pill show-all-mode" onclick="toggleHideInactive()">👁️ Show Inactive Devices (${devicesDatabase.length})</button>
+                            <button class="btn-purge-devices" onclick="bulkPurgeInactiveDevices()">🧹 Clean Uninstalled Devices</button>
+                        </div>
+                    </div>
+                `;
+                const totalCountEl = document.getElementById('total-devices-count');
+                if (totalCountEl) totalCountEl.innerText = `${visibleDevices.length} / ${devicesDatabase.length}`;
+                const onlineCountEl = document.getElementById('online-devices-count');
+                if (onlineCountEl) onlineCountEl.innerText = devicesDatabase.filter(d => d.status === 'online').length;
+                return;
+            }
+
+            const visibleIds = new Set(visibleDevices.map(d => d.id));
+
+            // Clean up old disconnected/filtered-out cards
             const existingCards = container.querySelectorAll('.device-card');
             existingCards.forEach(card => {
                 const devId = card.getAttribute('data-device-id');
-                if (devId && !activeIds.has(devId)) {
+                if (devId && !visibleIds.has(devId)) {
                     card.remove();
                 }
             });
 
-            devicesDatabase.forEach(dev => {
+            visibleDevices.forEach(dev => {
                 const isOnline = dev.status === 'online';
                 const batteryVal = dev.battery || 85;
                 const ramFreeMb = dev.ram_free || dev.ramFree || 1024;
@@ -2193,7 +2451,10 @@
                                 <div class="device-name dev-prop-name">${escapeHtml(dev.name || dev.model)}</div>
                                 <div class="device-label dev-prop-id">${escapeHtml(dev.manufacturer || 'Android Device')} • ${dev.id}</div>
                             </div>
-                            <div class="dev-prop-status">${statusPillHtml}</div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="dev-prop-status">${statusPillHtml}</div>
+                                <button class="btn-card-del" onclick="event.stopPropagation(); deleteDeviceFromGitHub('${dev.id}', '${escapeHtml(dev.name || dev.model)}')" title="মুছে ফেলুন (Delete Device)">🗑️ REMOVE</button>
+                            </div>
                         </div>
 
                         <div class="info-table">
@@ -2226,7 +2487,7 @@
                             </div>
                         </div>
 
-                        <div class="card-footer">
+                        <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
                             <span>⚡ 24/7 Immortal Guardian Locked</span>
                             <span class="btn-enter-device">View Details ➔</span>
                         </div>
@@ -2261,7 +2522,7 @@
             });
 
             const totalCountEl = document.getElementById('total-devices-count');
-            if (totalCountEl) totalCountEl.innerText = devicesDatabase.length;
+            if (totalCountEl) totalCountEl.innerText = hideInactiveDevices ? `${visibleDevices.length} / ${devicesDatabase.length}` : devicesDatabase.length;
             const onlineCountEl = document.getElementById('online-devices-count');
             if (onlineCountEl) onlineCountEl.innerText = devicesDatabase.filter(d => d.status === 'online').length;
         }
@@ -2337,6 +2598,34 @@
 
             // Live GPS & Location Map update
             updateLiveGpsMap(dev);
+
+            // Auto-detect Cellular / Mobile Data (4G/5G) for 100% Reliable Cloud Mode
+            const isCellular = dev.network && (dev.network.includes('4G') || dev.network.includes('5G') || dev.network.includes('3G') || dev.network.includes('Data') || !dev.network.includes('Wi-Fi'));
+            const noticeEl = document.getElementById('cellular-mode-notice');
+            const btnCloud = document.getElementById('btn-mode-cloud');
+            const btnLan = document.getElementById('btn-mode-lan');
+
+            if (isCellular) {
+                activeStreamMode = 'cloud';
+                if (noticeEl) noticeEl.style.display = 'block';
+                if (btnCloud) {
+                    btnCloud.style.background = 'rgba(0, 243, 255, 0.2)';
+                    btnCloud.style.borderColor = 'var(--accent-cyan)';
+                    btnCloud.style.color = 'var(--accent-cyan)';
+                    btnCloud.innerHTML = '🌐 GITHUB CLOUD (Active • 4G/5G Cellular)';
+                }
+                if (btnLan) {
+                    btnLan.style.background = 'rgba(255, 255, 255, 0.04)';
+                    btnLan.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                    btnLan.style.color = 'var(--text-muted)';
+                    btnLan.title = 'LAN stream requires phone & PC to be on the same Wi-Fi. Mobile Data uses GitHub Cloud Stream.';
+                }
+            } else {
+                if (noticeEl) noticeEl.style.display = 'none';
+                if (btnCloud) {
+                    btnCloud.innerHTML = '🌐 GITHUB CLOUD (Anywhere)';
+                }
+            }
 
             // Live screen stream handling
             if (isWatchingStream) {
@@ -2766,6 +3055,8 @@
 
         // Initial Load & High-Speed Polling (0.00s Cache-First + 2.5s Adaptive)
         window.onload = () => {
+            updateFilterButtonUI();
+
             // Render cached data immediately in 0.00ms!
             if (devicesDatabase.length > 0) {
                 renderFleetGrid();
