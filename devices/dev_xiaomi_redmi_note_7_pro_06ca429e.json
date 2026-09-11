@@ -7,7 +7,7 @@
   "ip": "10.78.53.87",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789145757345,
+  "last_seen": 1789145764210,
   "battery": 18,
   "battery_status": "Charging ⚡",
   "network": "📶 4G LTE (Robi)",
@@ -26,7 +26,7 @@
     "provider": "gps"
   },
   "ram_total": 5608,
-  "ram_free": 1822,
+  "ram_free": 1813,
   "ram_used_percent": 67,
   "temp": 40.900001525878906,
   "fps": 60,
