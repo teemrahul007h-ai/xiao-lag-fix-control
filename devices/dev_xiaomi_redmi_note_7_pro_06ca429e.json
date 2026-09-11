@@ -7,8 +7,8 @@
   "ip": "192.168.1.100",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789119760295,
-  "battery": 36,
+  "last_seen": 1789119774289,
+  "battery": 37,
   "battery_status": "Charging ⚡",
   "network": "📶 Wi-Fi (XIAO EXE)",
   "location": {
@@ -25,9 +25,9 @@
     "provider": "network"
   },
   "ram_total": 5608,
-  "ram_free": 2629,
+  "ram_free": 2625,
   "ram_used_percent": 53,
-  "temp": 39.900001525878906,
+  "temp": 40,
   "fps": 60,
   "refresh_rate": 60,
   "guardian_active": true,
