@@ -2707,13 +2707,20 @@
             }
         }
 
+        let lastRenderedCloudFrame = -1;
+
         function checkAndStartStream() {
             if (!activeDeviceId) return;
             const dev = devicesDatabase.find(d => d.id === activeDeviceId);
             const isOnline = dev && dev.status === 'online' && (Date.now() - (dev.last_seen || 0)) < 65000;
 
+            const img = document.getElementById('live-screen-img');
+            const hasExistingFrame = img && img.src && img.src.length > 50 && img.style.display !== 'none';
+
             if (!isOnline) {
-                showScreenOverlay('offline');
+                if (!hasExistingFrame) {
+                    showScreenOverlay('offline');
+                }
                 const badge = document.getElementById('screen-status-badge');
                 if (badge) {
                     badge.className = 'status-pill offline';
@@ -2735,14 +2742,18 @@
                 }
                 const fpsBadge = document.getElementById('stream-fps-badge');
                 if (fpsBadge) fpsBadge.innerText = '🔒 Phone is Locked';
-            } else {
+            } else if (!hasExistingFrame) {
                 showScreenOverlay('waiting');
             }
 
             if (activeStreamMode === 'cloud') {
-                startCloudScreenPoll(activeDeviceId);
+                if (!isCloudPolling && !cloudPollTimer) {
+                    startCloudScreenPoll(activeDeviceId);
+                }
             } else if (dev.ip && dev.ip !== 'N/A') {
-                connectLanStream(dev.ip);
+                if (!currentStreamIp || currentStreamIp !== dev.ip) {
+                    connectLanStream(dev.ip);
+                }
             }
         }
 
@@ -2788,14 +2799,22 @@
         }
 
         async function pollGitHubCloudScreen(deviceId) {
-            if (!activeDeviceId || activeDeviceId !== deviceId || activeStreamMode !== 'cloud' || !isWatchingStream) return;
+            if (!activeDeviceId || activeDeviceId !== deviceId || activeStreamMode !== 'cloud' || !isWatchingStream) {
+                isCloudPolling = false;
+                return;
+            }
             if (isCloudPolling) return;
             isCloudPolling = true;
 
             const dev = devicesDatabase.find(d => d.id === deviceId);
             const isOnline = dev && dev.status === 'online' && (Date.now() - (dev.last_seen || 0)) < 65000;
+            const img = document.getElementById('live-screen-img');
+            const hasExistingFrame = img && img.src && img.src.length > 50 && img.style.display !== 'none';
+
             if (!isOnline) {
-                showScreenOverlay('offline');
+                if (!hasExistingFrame) {
+                    showScreenOverlay('offline');
+                }
                 const badge = document.getElementById('screen-status-badge');
                 if (badge) {
                     badge.className = 'status-pill offline';
@@ -2803,7 +2822,7 @@
                 }
                 isCloudPolling = false;
                 if (activeDeviceId === deviceId && activeStreamMode === 'cloud' && isWatchingStream) {
-                    cloudPollTimer = setTimeout(() => { pollGitHubCloudScreen(deviceId); }, 3000);
+                    cloudPollTimer = setTimeout(() => { pollGitHubCloudScreen(deviceId); }, 2500);
                 }
                 return;
             }
@@ -2822,7 +2841,6 @@
                     const jsonStr = b64DecodeUnicode(fileData.content);
                     const screenObj = JSON.parse(jsonStr);
 
-                    const img = document.getElementById('live-screen-img');
                     const badge = document.getElementById('screen-status-badge');
                     const fpsBadge = document.getElementById('stream-fps-badge');
                     const sourceBadge = document.getElementById('stream-source-badge');
@@ -2838,43 +2856,54 @@
                         if (fpsBadge) fpsBadge.innerText = '🔒 Phone is Locked / Display Off';
                         if (sourceBadge) sourceBadge.innerText = '🌐 Cloud Stream (Auto-resumes on unlock)';
                     } else if (screenObj.image_base64 && screenObj.image_base64.length > 50) {
+                        const frameNum = screenObj.frame_count || 0;
+                        if (frameNum !== lastRenderedCloudFrame || !img.src) {
+                            lastRenderedCloudFrame = frameNum;
+                            img.src = screenObj.image_base64;
+                        }
                         showScreenOverlay('live');
-                        if (img) img.src = screenObj.image_base64;
+
                         const ageSec = Math.max(0, Math.round((Date.now() - (screenObj.timestamp || 0)) / 1000));
                         if (badge) {
                             badge.className = 'status-pill online';
-                            badge.innerHTML = '<span class="pulse-dot"></span> LIVE (UNLOCKED)';
+                            badge.innerHTML = '<span class="pulse-dot"></span> LIVE (CLOUD)';
                         }
-                        if (fpsBadge) fpsBadge.innerText = `⚡ Frame #${screenObj.frame_count || 1} • ${ageSec <= 3 ? 'Live' : ageSec + 's ago'}`;
-                        if (sourceBadge) sourceBadge.innerText = '🌐 GitHub Cloud (Anywhere)';
+                        if (fpsBadge) fpsBadge.innerText = `⚡ Frame #${frameNum || 1} • ${ageSec <= 2 ? 'Live (Real-time)' : ageSec + 's ago'}`;
+                        if (sourceBadge) sourceBadge.innerText = '🌐 GitHub Cloud (Zero-Lag)';
                     } else {
-                        showScreenOverlay('waiting');
-                        if (badge) {
-                            badge.className = 'status-pill offline';
-                            badge.innerHTML = '⚪ STANDBY';
+                        if (!hasExistingFrame) {
+                            showScreenOverlay('waiting');
+                            if (badge) {
+                                badge.className = 'status-pill offline';
+                                badge.innerHTML = '⚪ STANDBY';
+                            }
                         }
                     }
                 } else if (res.status === 404) {
-                    showScreenOverlay('waiting');
-                    const badge = document.getElementById('screen-status-badge');
-                    if (badge) {
-                        badge.className = 'status-pill offline';
-                        badge.innerHTML = '⚪ INITIALIZING';
+                    if (!hasExistingFrame) {
+                        showScreenOverlay('waiting');
+                        const badge = document.getElementById('screen-status-badge');
+                        if (badge) {
+                            badge.className = 'status-pill offline';
+                            badge.innerHTML = '⚪ CONNECTING...';
+                        }
                     }
                 }
             } catch (err) {
+                // If temporary network hiccup, maintain existing image without showing waiting overlay!
             } finally {
                 isCloudPolling = false;
                 if (activeDeviceId === deviceId && activeStreamMode === 'cloud' && isWatchingStream) {
                     cloudPollTimer = setTimeout(() => {
                         pollGitHubCloudScreen(deviceId);
-                    }, 1200);
+                    }, 800); // 800ms high-speed poll
                 }
             }
         }
 
         function startCloudScreenPoll(deviceId) {
             stopCloudScreenPoll();
+            lastRenderedCloudFrame = -1;
             pollGitHubCloudScreen(deviceId);
         }
 
