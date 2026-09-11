@@ -7,7 +7,7 @@
   "ip": "192.168.0.106",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789121024794,
+  "last_seen": 1789121032269,
   "battery": 15,
   "battery_status": "Discharging • Healthy",
   "network": "📶 Wi-Fi (𝗦𝗔𝗥𝗔ʷⁱᶠⁱ)",
@@ -19,21 +19,21 @@
     "speed": 0,
     "bearing": 75,
     "altitude": 27,
-    "time": 1789121025000,
+    "time": 1789121032000,
     "has_data": true,
     "is_live": true,
     "is_approximate": false,
     "provider": "gps"
   },
   "ram_total": 1832,
-  "ram_free": 639,
+  "ram_free": 636,
   "ram_used_percent": 65,
-  "temp": 39.599998474121094,
+  "temp": 39.29999923706055,
   "fps": 120,
   "refresh_rate": 120,
   "guardian_active": true,
   "screen_sharing": true,
-  "screen_frames": 4746,
+  "screen_frames": 4881,
   "is_locked": false,
   "screen_on": true,
   "lock_status": "unlocked",
@@ -41,14 +41,14 @@
     {
       "name": "Chrome",
       "pkg": "com.android.chrome",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Contacts",
       "pkg": "com.android.contacts",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
@@ -69,21 +69,21 @@
     {
       "name": "AI Gallery",
       "pkg": "com.gallery20",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Assistant",
       "pkg": "com.google.android.apps.assistant",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Drive",
       "pkg": "com.google.android.apps.docs",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
@@ -104,7 +104,7 @@
     {
       "name": "Gallery",
       "pkg": "com.google.android.apps.photosgo",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
@@ -118,14 +118,14 @@
     {
       "name": "Calendar",
       "pkg": "com.google.android.calendar",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Gmail",
       "pkg": "com.google.android.gm",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
@@ -153,14 +153,14 @@
     {
       "name": "Camera",
       "pkg": "com.transsion.camera",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Clock",
       "pkg": "com.transsion.deskclock",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
@@ -209,7 +209,7 @@
     {
       "name": "Downloads",
       "pkg": "com.android.documentsui",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
@@ -223,42 +223,42 @@
     {
       "name": "Files",
       "pkg": "com.google.android.apps.nbu.files",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Google",
       "pkg": "com.google.android.apps.searchlite",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Audio Share",
       "pkg": "com.transsion.audioshare",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
     {
       "name": "Calculator",
       "pkg": "com.transsion.calculator",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
     {
       "name": "File Manager",
       "pkg": "com.transsion.filemanagerx",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
     {
       "name": "FM Radio",
       "pkg": "com.transsion.fmradio",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
@@ -272,7 +272,7 @@
     {
       "name": "Hi Translate",
       "pkg": "com.zaz.translate",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": true
     },
@@ -286,21 +286,21 @@
     {
       "name": "Action Notch",
       "pkg": "com.androxus.touchthenotch",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
     {
       "name": "Desh Bangla Keyboard",
       "pkg": "com.bangla.keyboard.for.android",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
     {
       "name": "Binance",
       "pkg": "com.binance.dev",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
@@ -335,7 +335,7 @@
     {
       "name": "DeepSeek",
       "pkg": "com.deepseek.chat",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
@@ -349,7 +349,7 @@
     {
       "name": "Facebook",
       "pkg": "com.facebook.katana",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
@@ -370,7 +370,7 @@
     {
       "name": "ChatGPT",
       "pkg": "com.openai.chatgpt",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
