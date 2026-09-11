@@ -63,18 +63,24 @@
             flex-direction: column;
         }
 
-        /* ── Leaflet Dark Map Customization ──────────────── */
+        /* ── Real Google Maps Container ──────────────── */
         .leaflet-container {
-            background: #0b0f19 !important;
+            background: #e5e3df !important;
             font-family: var(--font-body) !important;
         }
         .leaflet-tile {
-            filter: brightness(0.7) invert(1) contrast(1.8) hue-rotate(180deg) saturate(0.3) !important;
+            border: none !important;
         }
         .custom-gps-pin {
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        .custom-gps-pin-offline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: grayscale(0.2);
         }
 
         /* ── Header ────────────────────────────────────────── */
@@ -1609,22 +1615,26 @@
                     <!-- Card 3: Real-Time GPS & Google Maps Live Tracker -->
                     <div class="panel-card" style="margin-bottom: 0;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <div class="panel-title" style="margin-bottom: 0;">🗺️ LIVE GPS & GOOGLE MAPS TRACKER</div>
+                            <div class="panel-title" style="margin-bottom: 0;">🗺️ LIVE GOOGLE MAPS TRACKER</div>
                             <span id="gps-status-badge" class="status-pill offline" style="font-size: 11px; padding: 4px 10px;">
                                 ⚪ GPS STANDBY
                             </span>
                         </div>
 
-                        <!-- Map Container -->
-                        <div id="gps-map-box" style="position: relative; width: 100%; height: 240px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-glass); background: #0b0f19;">
+                        <!-- Direct Google Maps Container (280px Height) -->
+                        <div id="gps-map-box" style="position: relative; width: 100%; height: 280px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-glass); background: #e5e3df;">
                             <div id="gps-map" style="width: 100%; height: 100%;"></div>
-                            <!-- Overlay when GPS is off or searching -->
-                            <div id="gps-overlay-nodata" style="position: absolute; inset: 0; background: rgba(11, 15, 25, 0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; z-index: 500; text-align: center; padding: 20px;">
-                                <div style="font-size: 36px; animation: pulse-glow 2s infinite;">🛰️</div>
-                                <div id="gps-overlay-title" style="font-family: var(--font-display); font-size: 14px; color: var(--accent-cyan); font-weight: 700;">WAITING FOR GPS FIX</div>
-                                <div id="gps-overlay-msg" style="font-size: 12px; color: var(--text-muted); max-width: 320px; line-height: 1.5;">
-                                    মোবাইলের লোকেশন (GPS) চালু থাকলে এখানে লাইভ গুগল ম্যাপের মতো রিয়েল-টাইম গতিবিধি ও অবস্থান প্রদর্শিত হবে।
-                                </div>
+
+                            <!-- Floating Layer Switcher (Roadmap vs Satellite) -->
+                            <div style="position: absolute; top: 10px; right: 10px; z-index: 600; display: flex; gap: 4px; background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(8px); padding: 4px; border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.2);">
+                                <button id="btn-map-roadmap" onclick="switchMapLayer('roadmap')" style="background: var(--accent-cyan); color: #07090e; border: none; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s;">🗺️ Map</button>
+                                <button id="btn-map-satellite" onclick="switchMapLayer('satellite')" style="background: transparent; color: var(--text-white); border: none; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s;">🛰️ Satellite</button>
+                            </div>
+
+                            <!-- Floating Live Tracking Indicator -->
+                            <div id="gps-floating-pill" style="position: absolute; top: 10px; left: 10px; z-index: 600; background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(8px); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(0, 243, 255, 0.3); font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; pointer-events: none;">
+                                <span id="gps-floating-dot" class="pulse-dot"></span>
+                                <span id="gps-floating-text" style="color: var(--accent-green);">🟢 LIVE GPS TRACKING</span>
                             </div>
                         </div>
 
@@ -1642,12 +1652,16 @@
                                 <span class="info-label">🏎️ Movement Speed</span>
                                 <span class="info-val" id="gps-speed">-- km/h</span>
                             </div>
+                            <div class="info-row">
+                                <span class="info-label">⏱️ Location Status</span>
+                                <span class="info-val" id="gps-last-recorded" style="color: var(--text-muted);">--</span>
+                            </div>
                         </div>
 
-                        <!-- 1-Click Open in Google Maps Button -->
+                        <!-- 1-Click Open in Google Maps App Button -->
                         <a id="btn-open-google-maps" href="https://maps.google.com" target="_blank" rel="noopener noreferrer" 
                            style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 12px; padding: 11px; border-radius: 8px; background: linear-gradient(135deg, rgba(0, 243, 255, 0.15), rgba(0, 255, 136, 0.15)); border: 1px solid var(--accent-cyan); color: #ffffff; font-family: var(--font-sub); font-size: 13px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 0.8px; transition: all 0.2s ease; cursor: pointer;">
-                            <span>🗺️ OPEN IN GOOGLE MAPS ↗️</span>
+                            <span>🗺️ OPEN IN GOOGLE MAPS APP ↗️</span>
                         </a>
                     </div>
                 </div>
@@ -1870,133 +1884,268 @@
             return `<div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">${typeBadge} ${detailTag} ${hotspotBadge}</div>`;
         }
 
-        // ── Real-Time GPS & Google Maps Tracker ──
+        // ── Real-Time Google Maps Live Engine ──
         let liveMapInstance = null;
         let liveMapMarker = null;
         let liveMapAccuracyCircle = null;
+        let liveMapTrail = null;
+        let currentMapLayerType = 'roadmap';
+        let mapRoadmapLayer = null;
+        let mapSatelliteLayer = null;
+        let lastRenderedDevId = null;
 
-        function updateLiveGpsMap(loc) {
-            const overlay = document.getElementById('gps-overlay-nodata');
+        function switchMapLayer(type) {
+            currentMapLayerType = type;
+            const btnRoadmap = document.getElementById('btn-map-roadmap');
+            const btnSatellite = document.getElementById('btn-map-satellite');
+
+            if (type === 'roadmap') {
+                if (btnRoadmap) {
+                    btnRoadmap.style.background = 'var(--accent-cyan)';
+                    btnRoadmap.style.color = '#07090e';
+                }
+                if (btnSatellite) {
+                    btnSatellite.style.background = 'transparent';
+                    btnSatellite.style.color = 'var(--text-white)';
+                }
+                if (liveMapInstance) {
+                    if (mapSatelliteLayer && liveMapInstance.hasLayer(mapSatelliteLayer)) {
+                        liveMapInstance.removeLayer(mapSatelliteLayer);
+                    }
+                    if (mapRoadmapLayer && !liveMapInstance.hasLayer(mapRoadmapLayer)) {
+                        liveMapInstance.addLayer(mapRoadmapLayer);
+                    }
+                }
+            } else {
+                if (btnSatellite) {
+                    btnSatellite.style.background = 'var(--accent-cyan)';
+                    btnSatellite.style.color = '#07090e';
+                }
+                if (btnRoadmap) {
+                    btnRoadmap.style.background = 'transparent';
+                    btnRoadmap.style.color = 'var(--text-white)';
+                }
+                if (liveMapInstance) {
+                    if (mapRoadmapLayer && liveMapInstance.hasLayer(mapRoadmapLayer)) {
+                        liveMapInstance.removeLayer(mapRoadmapLayer);
+                    }
+                    if (mapSatelliteLayer && !liveMapInstance.hasLayer(mapSatelliteLayer)) {
+                        liveMapInstance.addLayer(mapSatelliteLayer);
+                    }
+                }
+            }
+        }
+
+        function updateLiveGpsMap(dev) {
+            if (!dev) return;
+
             const badge = document.getElementById('gps-status-badge');
+            const floatingText = document.getElementById('gps-floating-text');
+            const floatingDot = document.getElementById('gps-floating-dot');
             const coordsEl = document.getElementById('gps-coords');
             const accEl = document.getElementById('gps-accuracy');
             const speedEl = document.getElementById('gps-speed');
+            const lastRecEl = document.getElementById('gps-last-recorded');
             const gmapsBtn = document.getElementById('btn-open-google-maps');
-            const overlayTitle = document.getElementById('gps-overlay-title');
-            const overlayMsg = document.getElementById('gps-overlay-msg');
 
-            if (!loc || loc.enabled === false) {
-                if (overlay) overlay.style.display = 'flex';
-                if (overlayTitle) overlayTitle.innerText = 'LOCATION TURNED OFF';
-                if (overlayMsg) overlayMsg.innerText = 'মোবাইলে লোকেশন (GPS) বন্ধ রয়েছে। ফোনের নোটিফিকেশন বার বা সেটিংস থেকে লোকেশন চালু করলেই এখানে লাইভ ম্যাপে দেখা যাবে।';
-                if (badge) {
-                    badge.className = 'status-pill offline';
-                    badge.style.borderColor = 'rgba(255, 23, 68, 0.4)';
-                    badge.style.color = 'var(--accent-red)';
-                    badge.innerHTML = '⚠️ LOCATION OFF';
-                }
-                if (coordsEl) coordsEl.innerText = '-- , --';
-                if (accEl) accEl.innerText = 'Disabled';
-                if (speedEl) speedEl.innerText = '-- km/h';
-                if (gmapsBtn) {
-                    gmapsBtn.style.opacity = '0.5';
-                    gmapsBtn.style.pointerEvents = 'none';
-                }
-                return;
+            const devId = dev.id;
+            let loc = dev.location;
+
+            // Save valid location into localStorage for offline persistence
+            if (loc && loc.has_data && loc.lat && loc.lng && Number(loc.lat) !== 0) {
+                try {
+                    localStorage.setItem('xiao_last_loc_' + devId, JSON.stringify(loc));
+                } catch (e) {}
+            } else {
+                // If current telemetry has no data or device is offline, check cached last known location
+                try {
+                    const cachedStr = localStorage.getItem('xiao_last_loc_' + devId);
+                    if (cachedStr) {
+                        loc = JSON.parse(cachedStr);
+                        loc.is_persisted_cache = true;
+                    }
+                } catch (e) {}
             }
 
-            if (!loc.has_data || !loc.lat || !loc.lng) {
-                if (overlay) overlay.style.display = 'flex';
-                if (overlayTitle) overlayTitle.innerText = 'ACQUIRING GPS FIX';
-                if (overlayMsg) overlayMsg.innerText = 'স্যাটেলাইট বা নেটওয়ার্ক থেকে ডিভাইস কো-অর্ডিনেট সিঙ্ক হচ্ছে... অনুগ্রহ করে কয়েক সেকেন্ড অপেক্ষা করুন।';
-                if (badge) {
-                    badge.className = 'status-pill online';
-                    badge.style.borderColor = 'var(--accent-amber)';
-                    badge.style.color = 'var(--accent-amber)';
-                    badge.innerHTML = '🛰️ SEARCHING FIX';
-                }
-                if (coordsEl) coordsEl.innerText = 'Locating...';
-                if (accEl) accEl.innerText = 'Pending GPS signal';
-                if (speedEl) speedEl.innerText = '-- km/h';
-                if (gmapsBtn) {
-                    gmapsBtn.style.opacity = '0.5';
-                    gmapsBtn.style.pointerEvents = 'none';
-                }
-                return;
-            }
+            const hasValidCoords = loc && loc.lat && loc.lng && Number(loc.lat) !== 0 && Number(loc.lng) !== 0;
+            const isOnline = dev.status === 'online' && (Date.now() - (dev.last_seen || 0)) < 65000;
+            const isLive = hasValidCoords && isOnline && !loc.is_last_known && !loc.is_persisted_cache;
 
-            // GPS is LOCKED & VALID!
-            if (overlay) overlay.style.display = 'none';
-            if (badge) {
-                badge.className = 'status-pill online';
-                badge.style.borderColor = 'rgba(0, 255, 136, 0.4)';
-                badge.style.color = 'var(--accent-green)';
-                badge.innerHTML = '<span class="pulse-dot"></span> GPS ACTIVE';
-            }
+            const lat = hasValidCoords ? Number(loc.lat) : 23.8103;
+            const lng = hasValidCoords ? Number(loc.lng) : 90.4125;
+            const accuracy = (loc && loc.accuracy) ? loc.accuracy : 15;
+            const speed = (loc && loc.speed) ? loc.speed : 0;
+            const timeStr = (loc && loc.time) ? new Date(loc.time).toLocaleTimeString() : (dev.last_seen ? new Date(dev.last_seen).toLocaleTimeString() : 'Just now');
 
-            const lat = Number(loc.lat);
-            const lng = Number(loc.lng);
-            const accuracy = loc.accuracy || 15;
-            const speed = loc.speed || 0;
-
-            if (coordsEl) coordsEl.innerText = `${lat.toFixed(5)}°, ${lng.toFixed(5)}°`;
-            if (accEl) accEl.innerText = `±${accuracy} meters`;
-            if (speedEl) speedEl.innerText = `${speed} km/h`;
-
-            if (gmapsBtn) {
+            if (gmapsBtn && hasValidCoords) {
                 gmapsBtn.href = `https://www.google.com/maps?q=${lat},${lng}`;
                 gmapsBtn.style.opacity = '1';
                 gmapsBtn.style.pointerEvents = 'auto';
             }
 
-            // Leaflet Map Init & Updates (Canvas-accelerated for mobile)
-            if (typeof L !== 'undefined') {
-                const mapContainer = document.getElementById('gps-map');
-                if (mapContainer) {
-                    if (!liveMapInstance) {
-                        try {
-                            liveMapInstance = L.map('gps-map', {
-                                zoomControl: false,
-                                attributionControl: false,
-                                preferCanvas: true // 10x faster rendering on mobile
-                            }).setView([lat, lng], 16);
-
-                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                maxZoom: 19
-                            }).addTo(liveMapInstance);
-
-                            const pulseIcon = L.divIcon({
-                                className: 'custom-gps-pin',
-                                html: `<div style="width: 16px; height: 16px; background: #00f3ff; border: 3px solid #ffffff; border-radius: 50%; box-shadow: 0 0 14px #00f3ff, 0 0 28px #00f3ff;"></div>`,
-                                iconSize: [16, 16],
-                                iconAnchor: [8, 8]
-                            });
-
-                            liveMapMarker = L.marker([lat, lng], { icon: pulseIcon }).addTo(liveMapInstance);
-                            liveMapAccuracyCircle = L.circle([lat, lng], {
-                                radius: accuracy,
-                                color: '#00f3ff',
-                                fillColor: '#00f3ff',
-                                fillOpacity: 0.15,
-                                weight: 1.5
-                            }).addTo(liveMapInstance);
-                        } catch (e) {
-                            console.error("Leaflet init error:", e);
-                        }
-                    } else {
-                        try {
-                            liveMapInstance.setView([lat, lng]);
-                            if (liveMapMarker) liveMapMarker.setLatLng([lat, lng]);
-                            if (liveMapAccuracyCircle) {
-                                liveMapAccuracyCircle.setLatLng([lat, lng]);
-                                liveMapAccuracyCircle.setRadius(accuracy);
-                            }
-                        } catch (e) {
-                            console.error("Leaflet update error:", e);
-                        }
-                    }
+            // Update UI Badges & Status Text
+            if (isLive) {
+                if (badge) {
+                    badge.className = 'status-pill online';
+                    badge.style.borderColor = 'rgba(0, 255, 136, 0.4)';
+                    badge.style.color = 'var(--accent-green)';
+                    badge.innerHTML = '<span class="pulse-dot"></span> 🟢 LIVE GPS';
+                }
+                if (floatingText) {
+                    floatingText.style.color = 'var(--accent-green)';
+                    floatingText.innerText = `🟢 LIVE TRACKING • ${speed > 0 ? speed + ' km/h' : 'STATIONARY'}`;
+                }
+                if (floatingDot) floatingDot.style.display = 'inline-block';
+                if (coordsEl) coordsEl.innerText = `${lat.toFixed(5)}°, ${lng.toFixed(5)}°`;
+                if (accEl) accEl.innerText = `±${accuracy} meters (High Precision)`;
+                if (speedEl) speedEl.innerText = `${speed} km/h ${speed > 20 ? '🏎️ Driving' : (speed > 2 ? '🚶 Walking' : '🛑 Stationary')}`;
+                if (lastRecEl) {
+                    lastRecEl.innerText = `● Live Now (${timeStr})`;
+                    lastRecEl.style.color = 'var(--accent-green)';
+                }
+            } else if (hasValidCoords) {
+                // Phone is offline or GPS paused, but last location is preserved!
+                if (badge) {
+                    badge.className = 'status-pill offline';
+                    badge.style.borderColor = 'rgba(255, 183, 3, 0.4)';
+                    badge.style.color = 'var(--accent-amber)';
+                    badge.innerHTML = '⏳ LAST KNOWN (OFFLINE)';
+                }
+                if (floatingText) {
+                    floatingText.style.color = 'var(--accent-amber)';
+                    floatingText.innerText = `⏳ OFFLINE • LAST KNOWN POSITION`;
+                }
+                if (floatingDot) floatingDot.style.display = 'none';
+                if (coordsEl) coordsEl.innerText = `${lat.toFixed(5)}°, ${lng.toFixed(5)}° (Last Position)`;
+                if (accEl) accEl.innerText = `±${accuracy} meters (Recorded)`;
+                if (speedEl) speedEl.innerText = `0 km/h (Disconnected)`;
+                if (lastRecEl) {
+                    lastRecEl.innerText = `Last Recorded: ${timeStr} (Offline)`;
+                    lastRecEl.style.color = 'var(--accent-amber)';
+                }
+            } else {
+                // No coordinates yet
+                if (badge) {
+                    badge.className = 'status-pill offline';
+                    badge.style.borderColor = 'rgba(255, 23, 68, 0.4)';
+                    badge.style.color = 'var(--accent-red)';
+                    badge.innerHTML = '⚠️ NO GPS FIX';
+                }
+                if (floatingText) {
+                    floatingText.style.color = 'var(--text-muted)';
+                    floatingText.innerText = `🛰️ SEARCHING FOR FIRST GPS FIX...`;
+                }
+                if (floatingDot) floatingDot.style.display = 'none';
+                if (coordsEl) coordsEl.innerText = `Waiting for device GPS...`;
+                if (accEl) accEl.innerText = `Pending Signal`;
+                if (speedEl) speedEl.innerText = `-- km/h`;
+                if (lastRecEl) {
+                    lastRecEl.innerText = `Waiting for phone connection`;
+                    lastRecEl.style.color = 'var(--text-muted)';
                 }
             }
+
+            // ── Leaflet Google Maps Instance Management ──
+            if (typeof L === 'undefined') return;
+
+            const mapContainer = document.getElementById('gps-map');
+            if (!mapContainer) return;
+
+            // Reset polyline trail if switching to a different device
+            if (lastRenderedDevId !== devId) {
+                lastRenderedDevId = devId;
+                if (liveMapTrail) liveMapTrail.setLatLngs([]);
+            }
+
+            if (!liveMapInstance) {
+                try {
+                    mapRoadmapLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                        maxZoom: 20,
+                        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+                    });
+                    mapSatelliteLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+                        maxZoom: 20,
+                        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+                    });
+
+                    liveMapInstance = L.map('gps-map', {
+                        zoomControl: true,
+                        attributionControl: false,
+                        preferCanvas: true
+                    }).setView([lat, lng], hasValidCoords ? 17 : 13);
+
+                    if (currentMapLayerType === 'satellite') {
+                        mapSatelliteLayer.addTo(liveMapInstance);
+                    } else {
+                        mapRoadmapLayer.addTo(liveMapInstance);
+                    }
+
+                    liveMapTrail = L.polyline([], {
+                        color: '#00f3ff',
+                        weight: 4,
+                        opacity: 0.85,
+                        smoothFactor: 1
+                    }).addTo(liveMapInstance);
+                } catch (e) {
+                    console.error("Leaflet init error:", e);
+                }
+            }
+
+            if (!liveMapInstance) return;
+
+            // Update Marker and Accuracy Circle
+            const pinColor = isLive ? '#00f3ff' : '#ffb703';
+            const pinBorder = isLive ? '#00ff88' : '#ffffff';
+            const shadowColor = isLive ? '#00f3ff' : '#ffb703';
+
+            const pulseIcon = L.divIcon({
+                className: isLive ? 'custom-gps-pin' : 'custom-gps-pin-offline',
+                html: `<div style="width: 18px; height: 18px; background: ${pinColor}; border: 3px solid ${pinBorder}; border-radius: 50%; box-shadow: 0 0 16px ${shadowColor}, 0 0 32px ${shadowColor};"></div>`,
+                iconSize: [18, 18],
+                iconAnchor: [9, 9]
+            });
+
+            if (!liveMapMarker) {
+                liveMapMarker = L.marker([lat, lng], { icon: pulseIcon }).addTo(liveMapInstance);
+            } else {
+                liveMapMarker.setIcon(pulseIcon);
+                liveMapMarker.setLatLng([lat, lng]);
+            }
+
+            if (!liveMapAccuracyCircle) {
+                liveMapAccuracyCircle = L.circle([lat, lng], {
+                    radius: accuracy,
+                    color: pinColor,
+                    fillColor: pinColor,
+                    fillOpacity: 0.15,
+                    weight: 1.5
+                }).addTo(liveMapInstance);
+            } else {
+                liveMapAccuracyCircle.setLatLng([lat, lng]);
+                liveMapAccuracyCircle.setRadius(accuracy);
+                liveMapAccuracyCircle.setStyle({ color: pinColor, fillColor: pinColor });
+            }
+
+            // Smooth pan / zoom if valid
+            if (hasValidCoords) {
+                if (isLive) {
+                    liveMapInstance.panTo([lat, lng], { animate: true, duration: 0.8 });
+                    if (liveMapTrail) {
+                        const existingPoints = liveMapTrail.getLatLngs();
+                        const lastPoint = existingPoints.length > 0 ? existingPoints[existingPoints.length - 1] : null;
+                        if (!lastPoint || lastPoint.lat !== lat || lastPoint.lng !== lng) {
+                            liveMapTrail.addLatLng([lat, lng]);
+                        }
+                    }
+                } else {
+                    liveMapInstance.setView([lat, lng]);
+                }
+            }
+
+            // Ensure tile sizing is accurate
+            requestAnimationFrame(() => {
+                if (liveMapInstance) liveMapInstance.invalidateSize();
+            });
         }
 
         // Render All Device Cards (In-Place DOM Updating for Zero-Lag Mobile Performance)
@@ -2187,7 +2336,7 @@
             }
 
             // Live GPS & Location Map update
-            updateLiveGpsMap(dev.location);
+            updateLiveGpsMap(dev);
 
             // Live screen stream handling
             if (isWatchingStream) {
