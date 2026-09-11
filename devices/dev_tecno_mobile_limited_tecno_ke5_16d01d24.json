@@ -7,7 +7,7 @@
   "ip": "192.168.0.106",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789124192862,
+  "last_seen": 1789124197010,
   "battery": 5,
   "battery_status": "Charging ⚡",
   "network": "📶 Wi-Fi",
@@ -26,7 +26,7 @@
     "provider": "gps"
   },
   "ram_total": 1832,
-  "ram_free": 658,
+  "ram_free": 654,
   "ram_used_percent": 64,
   "temp": 38.20000076293945,
   "fps": 120,
@@ -35,7 +35,7 @@
   "screen_sharing": false,
   "screen_frames": 960,
   "is_locked": true,
-  "screen_on": true,
+  "screen_on": false,
   "lock_status": "locked",
   "apps": [
     {
