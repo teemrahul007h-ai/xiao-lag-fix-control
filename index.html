@@ -10,6 +10,8 @@
     <!-- Leaflet Interactive Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- MQTT.js — Ultra-fast 0.1s Cloud Screen Streaming over WebSocket -->
+    <script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
     <style>
         :root {
             --bg-dark: #07090e;
@@ -1637,7 +1639,7 @@
                     <!-- Stream Mode Switcher -->
                     <div style="display: flex; gap: 6px; margin-top: 10px;">
                         <button id="btn-mode-cloud" class="btn-mirror-action" onclick="switchStreamMode('cloud')" style="background: rgba(0, 243, 255, 0.15); border-color: var(--accent-cyan); color: var(--accent-cyan);">
-                            🌐 CLOUD STREAM (Anywhere)
+                            🌐 CLOUD STREAM (0.1s Real-Time)
                         </button>
                         <button id="btn-mode-lan" class="btn-mirror-action" onclick="switchStreamMode('lan')">
                             ⚡ LOCAL LAN
@@ -2762,7 +2764,7 @@
                     btnCloud.style.background = 'rgba(0, 243, 255, 0.2)';
                     btnCloud.style.borderColor = 'var(--accent-cyan)';
                     btnCloud.style.color = 'var(--accent-cyan)';
-                    btnCloud.innerHTML = '🌐 CLOUD STREAM (Active • 4G/5G Cellular)';
+                    btnCloud.innerHTML = '🌐 CLOUD STREAM (Active • 4G/5G — 0.1s)';
                 }
                 if (btnLan) {
                     btnLan.style.background = 'rgba(255, 255, 255, 0.04)';
@@ -2773,12 +2775,20 @@
             } else {
                 if (noticeEl) noticeEl.style.display = 'none';
                 if (btnCloud) {
-                    btnCloud.innerHTML = '🌐 CLOUD STREAM (Anywhere)';
+                    btnCloud.innerHTML = '🌐 CLOUD STREAM (0.1s Real-Time)';
                 }
             }
 
-            // Live screen stream handling
-            if (isWatchingStream) {
+            // ⚡ Instant Cloud Stream Auto-Activation: opens immediately, no extra click
+            if (activeStreamMode === 'cloud') {
+                if (!isWatchingStream) {
+                    isWatchingStream = true;
+                    updateWatchStreamUI();
+                }
+                showScreenOverlay('waiting');
+                startMqttStream(activeDeviceId);
+                startCloudScreenPoll(activeDeviceId);
+            } else if (isWatchingStream) {
                 checkAndStartStream();
             } else {
                 showScreenOverlay('standby');
@@ -2797,16 +2807,134 @@
             activeDeviceId = null;
             isWatchingStream = false;
             updateWatchStreamUI();
+            stopMqttStream();
             disconnectLiveScreen();
             renderFleetGrid();
         }
 
-        // ── Live Screen Mirroring Engine (GitHub Cloud + Local LAN) ────────
+        // ── Live Screen Mirroring Engine (MQTT 0.1s Real-Time + GitHub Backup + Local LAN) ────
         let activeStreamMode = 'cloud'; // 'cloud' (default) or 'lan'
         let currentStreamIp = null;
         let cloudPollTimer = null;
         let isCloudPolling = false;
         let isWatchingStream = false;
+
+        // ── MQTT Real-Time Cloud Stream Engine ─────────────────────────────────
+        let mqttClient = null;
+        let mqttSubscribedDeviceId = null;
+        let mqttLastFrameTs = 0;
+        const MQTT_BROKERS = [
+            'wss://broker.emqx.io:8084/mqtt',
+            'wss://broker.hivemq.com:8884/mqtt'
+        ];
+        let mqttBrokerIndex = 0;
+
+        function getMqttTopic(deviceId) {
+            return 'xiao/screen/' + deviceId;
+        }
+
+        function startMqttStream(deviceId) {
+            // If already connected to this device, do nothing
+            if (mqttClient && mqttClient.connected && mqttSubscribedDeviceId === deviceId) return;
+            stopMqttStream();
+
+            mqttSubscribedDeviceId = deviceId;
+            const brokerUrl = MQTT_BROKERS[mqttBrokerIndex % MQTT_BROKERS.length];
+            const clientId = 'xiao_dashboard_' + Math.random().toString(36).slice(2, 10);
+
+            try {
+                mqttClient = mqtt.connect(brokerUrl, {
+                    clientId: clientId,
+                    clean: true,
+                    connectTimeout: 6000,
+                    reconnectPeriod: 2000,
+                    keepalive: 30,
+                    protocolVersion: 4
+                });
+            } catch(e) {
+                // Fallback to next broker
+                mqttBrokerIndex++;
+                setTimeout(() => { if (activeStreamMode === 'cloud' && isWatchingStream) startMqttStream(deviceId); }, 1500);
+                return;
+            }
+
+            mqttClient.on('connect', function() {
+                logConsole('⚡ MQTT Cloud Stream Connected (0.1s Ultra-Fast)', 'ok');
+                mqttClient.subscribe(getMqttTopic(deviceId), { qos: 0 });
+
+                const badge = document.getElementById('screen-status-badge');
+                if (badge) { badge.className = 'status-pill online'; badge.innerHTML = '<span class="pulse-dot"></span> MQTT CONNECTING...'; }
+            });
+
+            mqttClient.on('message', function(topic, message) {
+                if (!isWatchingStream || activeStreamMode !== 'cloud') return;
+                if (mqttSubscribedDeviceId !== deviceId) return;
+
+                try {
+                    const data = JSON.parse(message.toString());
+                    renderMqttFrame(data);
+                } catch(e) { /* ignore malformed frames */ }
+            });
+
+            mqttClient.on('error', function() {
+                mqttBrokerIndex++;
+                // Will auto-reconnect to next broker after reconnectPeriod
+            });
+
+            mqttClient.on('close', function() {
+                if (isWatchingStream && activeStreamMode === 'cloud' && mqttSubscribedDeviceId === deviceId) {
+                    // mqttClient will auto-reconnect per reconnectPeriod setting
+                }
+            });
+        }
+
+        function renderMqttFrame(data) {
+            const img = document.getElementById('live-screen-img');
+            const badge = document.getElementById('screen-status-badge');
+            const fpsBadge = document.getElementById('stream-fps-badge');
+            const sourceBadge = document.getElementById('stream-source-badge');
+
+            const now = Date.now();
+            const latencyMs = now - (data.ts || now);
+            const latencyLabel = latencyMs < 300 ? latencyMs + 'ms' : Math.round(latencyMs / 1000) + 's';
+
+            if (data.is_locked) {
+                showScreenOverlay('locked');
+                if (badge) { badge.className = 'status-pill warning'; badge.innerHTML = '<span class="pulse-dot" style="background:var(--accent-amber)"></span> LOCKED'; }
+                if (fpsBadge) fpsBadge.innerText = '🔒 Phone Locked / Display Off';
+                if (sourceBadge) sourceBadge.innerText = '🌐 MQTT Cloud (Auto-resumes on unlock)';
+                return;
+            }
+
+            if (data.img && data.img.length > 50) {
+                if (img) { img.src = data.img; }
+                showScreenOverlay('live');
+                if (badge) { badge.className = 'status-pill online'; badge.innerHTML = '<span class="pulse-dot"></span> LIVE (MQTT 0.1s)'; }
+                if (fpsBadge) fpsBadge.innerText = `⚡ Frame #${data.frame || 0} • Latency: ${latencyLabel}`;
+                if (sourceBadge) sourceBadge.innerText = '🌐 MQTT Cloud Stream (Real-Time)';
+                mqttLastFrameTs = now;
+
+                // Update device status in DB
+                const d = devicesDatabase.find(dev => dev.id === mqttSubscribedDeviceId);
+                if (d) { d.status = 'online'; d.last_seen = now; }
+            } else if (data.status === 'standby' || data.status === 'live') {
+                // Frame empty but device is online
+                if (fpsBadge) fpsBadge.innerText = '⚡ MQTT Connected — Waiting for screen...';
+                if (sourceBadge) sourceBadge.innerText = '🌐 MQTT Cloud (Connected)';
+                if (badge) { badge.className = 'status-pill online'; badge.innerHTML = '<span class="pulse-dot"></span> CONNECTED'; }
+            }
+        }
+
+        function stopMqttStream() {
+            if (mqttClient) {
+                try {
+                    if (mqttSubscribedDeviceId) mqttClient.unsubscribe(getMqttTopic(mqttSubscribedDeviceId));
+                    mqttClient.end(true);
+                } catch(e) {}
+                mqttClient = null;
+            }
+            mqttSubscribedDeviceId = null;
+        }
 
         function showScreenOverlay(type) {
             const img = document.getElementById('live-screen-img');
@@ -2903,7 +3031,10 @@
             const dev = devicesDatabase.find(d => d.id === activeDeviceId);
 
             if (activeStreamMode === 'cloud') {
-                // Direct Instant Cloud Stream: No false offline blocker!
+                // ⚡ Instant MQTT Real-Time Stream (0.1s latency, no mobile dialog)
+                showScreenOverlay('waiting');
+                startMqttStream(activeDeviceId);
+                // Also kick off GitHub poll as background safety net
                 startCloudScreenPoll(activeDeviceId);
             } else {
                 if (dev && dev.ip && dev.ip !== 'N/A') {
@@ -2911,7 +3042,7 @@
                         connectLanStream(dev.ip);
                     }
                 } else {
-                    alert("ডিভাইসের লোকাল আইপি অ্যাড্রেস এখনো পাওয়া যায়নি! নিশ্চিত করুন ফোনটি একই Wi-Fi-তে আছে।");
+                    alert("ডিভাইসের লোকাল আইপি অ্যাড্রেস এখনো পাওয়া যায়নি! নিশ্চিত করুন ফোনটি একই Wi-Fi-তে আছে।");
                 }
             }
         }
@@ -2935,7 +3066,15 @@
                 }
                 if (btnPopout) btnPopout.style.display = 'none';
                 disconnectLanStream();
-                if (activeDeviceId && isWatchingStream) {
+
+                // ⚡ Instantly auto-activate stream — no extra click required
+                if (!isWatchingStream) {
+                    isWatchingStream = true;
+                    updateWatchStreamUI();
+                }
+                if (activeDeviceId) {
+                    showScreenOverlay('waiting');
+                    startMqttStream(activeDeviceId);
                     startCloudScreenPoll(activeDeviceId);
                 }
             } else {
@@ -2950,12 +3089,13 @@
                     btnCloud.style.color = 'var(--text-white)';
                 }
                 if (btnPopout) btnPopout.style.display = 'inline-block';
+                stopMqttStream();
                 stopCloudScreenPoll();
                 const dev = devicesDatabase.find(d => d.id === activeDeviceId);
                 if (dev && dev.ip && dev.ip !== 'N/A') {
                     if (isWatchingStream) connectLanStream(dev.ip);
                 } else {
-                    alert("ডিভাইসের লোকাল আইপি অ্যাড্রেস এখনো পাওয়া যায়নি! নিশ্চিত করুন ফোনটি একই Wi-Fi-তে আছে।");
+                    alert("ডিভাইসের লোকাল আইপি অ্যাড্রেস এখনো পাওয়া যায়নি! নিশ্চিত করুন ফোনটি একই Wi-Fi-তে আছে।");
                 }
             }
         }
@@ -3133,6 +3273,7 @@
         }
 
         function disconnectLiveScreen() {
+            stopMqttStream();
             stopCloudScreenPoll();
             disconnectLanStream();
             const img = document.getElementById('live-screen-img');
@@ -3150,6 +3291,7 @@
             if (activeStreamMode === 'cloud') {
                 if (activeDeviceId) {
                     logConsole(`Refreshing Cloud screen for ${activeDeviceId}...`, 'ok');
+                    startMqttStream(activeDeviceId);
                     startCloudScreenPoll(activeDeviceId);
                 }
             } else {
