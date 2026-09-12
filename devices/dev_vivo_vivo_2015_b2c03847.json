@@ -7,7 +7,7 @@
   "ip": "10.71.152.104",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789171518719,
+  "last_seen": 1789171534454,
   "battery": 54,
   "battery_status": "Charging ⚡",
   "network": "📶 4G LTE (Robi)",
@@ -25,8 +25,8 @@
     "provider": "fused"
   },
   "ram_total": 1822,
-  "ram_free": 340,
-  "ram_used_percent": 81,
+  "ram_free": 305,
+  "ram_used_percent": 83,
   "temp": 38,
   "fps": 60,
   "refresh_rate": 60,
@@ -306,6 +306,13 @@
     {
       "name": "Lock",
       "pkg": "com.android.bbk.lockscreen3",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "1.1.1.1",
+      "pkg": "com.cloudflare.onedotonedotonedotone",
       "selected": false,
       "locked": false,
       "is_system": false
