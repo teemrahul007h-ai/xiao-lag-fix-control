@@ -7,7 +7,7 @@
   "ip": "192.168.1.100",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789203064526,
+  "last_seen": 1789203065157,
   "battery": 100,
   "battery_status": "Charging ⚡",
   "network": "📶 Wi-Fi (XIAO EXE)",
@@ -16,7 +16,7 @@
     "has_data": false
   },
   "ram_total": 5608,
-  "ram_free": 1748,
+  "ram_free": 1764,
   "ram_used_percent": 68,
   "ram_hardware": "6 GB",
   "storage_total": "128 GB",
@@ -356,7 +356,7 @@
     {
       "name": "Free Fire MAX",
       "pkg": "com.dts.freefiremax",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
@@ -571,5 +571,11 @@
       "is_system": false
     }
   ],
-  "running_apps": []
+  "running_apps": [
+    {
+      "name": "com.lagfix.booster:core",
+      "pkg": "com.lagfix.booster:core",
+      "importance": "Background"
+    }
+  ]
 }
