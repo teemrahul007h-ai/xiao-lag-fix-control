@@ -7,10 +7,10 @@
   "ip": "192.168.1.100",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789215570445,
+  "last_seen": 1789215575628,
   "battery": 100,
   "battery_status": "Charging ⚡",
-  "network": "📶 Wi-Fi",
+  "network": "Offline \/ Disconnected",
   "location": {
     "enabled": false,
     "lat": 23.76292,
@@ -24,7 +24,7 @@
     "provider": "network"
   },
   "ram_total": 5608,
-  "ram_free": 2623,
+  "ram_free": 2629,
   "ram_used_percent": 53,
   "ram_hardware": "6 GB",
   "storage_total": "128 GB",
@@ -35,9 +35,9 @@
   "hardware_health": "98% • Excellent (চমৎকার স্থায়িত্ব)",
   "hardware_health_score": 98,
   "guardian_active": true,
-  "is_locked": false,
-  "screen_on": true,
-  "lock_status": "unlocked",
+  "is_locked": true,
+  "screen_on": false,
+  "lock_status": "locked",
   "apps": [
     {
       "name": "Camera",
