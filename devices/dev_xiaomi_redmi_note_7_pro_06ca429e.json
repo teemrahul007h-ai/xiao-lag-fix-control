@@ -7,10 +7,10 @@
   "ip": "192.168.1.100",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789216178893,
+  "last_seen": 1789216181992,
   "battery": 100,
   "battery_status": "Charging ⚡",
-  "network": "Offline \/ Disconnected",
+  "network": "📶 Wi-Fi",
   "location": {
     "enabled": false,
     "lat": 23.76292,
