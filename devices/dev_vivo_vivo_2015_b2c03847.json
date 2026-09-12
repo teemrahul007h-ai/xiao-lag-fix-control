@@ -7,10 +7,10 @@
   "ip": "10.71.152.104",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789217230292,
+  "last_seen": 1789217453298,
   "battery": 92,
   "battery_status": "Discharging • Healthy",
-  "network": "📶 Mobile Data (Robi)",
+  "network": "Offline \/ Disconnected",
   "location": {
     "enabled": false,
     "lat": 23.75676,
@@ -24,7 +24,7 @@
     "provider": "gps"
   },
   "ram_total": 1822,
-  "ram_free": 595,
+  "ram_free": 600,
   "ram_used_percent": 67,
   "ram_hardware": "2 GB",
   "storage_total": "32 GB",
@@ -35,9 +35,9 @@
   "hardware_health": "98% • Excellent (চমৎকার স্থায়িত্ব)",
   "hardware_health_score": 98,
   "guardian_active": true,
-  "is_locked": true,
-  "screen_on": false,
-  "lock_status": "locked",
+  "is_locked": false,
+  "screen_on": true,
+  "lock_status": "unlocked",
   "apps": [
     {
       "name": "Albums",
