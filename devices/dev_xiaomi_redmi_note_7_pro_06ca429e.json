@@ -7,7 +7,7 @@
   "ip": "192.168.1.100",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789203207295,
+  "last_seen": 1789203211615,
   "battery": 100,
   "battery_status": "Discharging • Healthy",
   "network": "📶 Wi-Fi",
@@ -24,8 +24,8 @@
     "provider": "network"
   },
   "ram_total": 5608,
-  "ram_free": 2992,
-  "ram_used_percent": 46,
+  "ram_free": 2960,
+  "ram_used_percent": 47,
   "ram_hardware": "6 GB",
   "storage_total": "128 GB",
   "activation_date": "01 Jan 2009, 06:00 AM (17y 8m ago)",
@@ -35,9 +35,9 @@
   "hardware_health": "98% • Excellent (চমৎকার স্থায়িত্ব)",
   "hardware_health_score": 98,
   "guardian_active": true,
-  "is_locked": false,
-  "screen_on": true,
-  "lock_status": "unlocked",
+  "is_locked": true,
+  "screen_on": false,
+  "lock_status": "locked",
   "apps": [
     {
       "name": "Camera",
