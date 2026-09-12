@@ -7,7 +7,7 @@
   "ip": "192.168.1.100",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789204754809,
+  "last_seen": 1789204760492,
   "battery": 100,
   "battery_status": "Discharging • Healthy",
   "network": "📶 Wi-Fi (XIAO EXE)",
@@ -25,8 +25,8 @@
     "provider": "network"
   },
   "ram_total": 5608,
-  "ram_free": 2191,
-  "ram_used_percent": 60,
+  "ram_free": 2180,
+  "ram_used_percent": 61,
   "ram_hardware": "6 GB",
   "storage_total": "128 GB",
   "activation_date": "01 Jan 2009, 06:00 AM (17y 8m ago)",
@@ -386,7 +386,7 @@
     {
       "name": "Messenger",
       "pkg": "com.facebook.orca",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
@@ -421,14 +421,14 @@
     {
       "name": "pandarider",
       "pkg": "com.logistics.rider.foodpanda",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
     {
       "name": "Ludo King",
       "pkg": "com.ludo.king",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
@@ -449,7 +449,7 @@
     {
       "name": "Remini",
       "pkg": "com.remini.xyz",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
@@ -470,14 +470,14 @@
     {
       "name": "WA Business",
       "pkg": "com.whatsapp.w4b",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
     {
       "name": "TikTok",
       "pkg": "com.zhiliaoapp.musically",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
@@ -512,7 +512,7 @@
     {
       "name": "Telegram",
       "pkg": "org.telegram.messenger",
-      "selected": false,
+      "selected": true,
       "locked": false,
       "is_system": false
     },
