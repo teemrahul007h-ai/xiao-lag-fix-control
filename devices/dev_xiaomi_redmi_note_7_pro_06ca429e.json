@@ -7,7 +7,7 @@
   "ip": "192.168.1.100",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789198848653,
+  "last_seen": 1789198856069,
   "battery": 96,
   "battery_status": "Discharging • Healthy",
   "network": "📶 Wi-Fi (XIAO EXE)",
@@ -24,7 +24,7 @@
     "provider": "network"
   },
   "ram_total": 5608,
-  "ram_free": 2428,
+  "ram_free": 2430,
   "ram_used_percent": 56,
   "ram_hardware": "6 GB",
   "storage_total": "128 GB",
@@ -36,7 +36,7 @@
   "screen_sharing": true,
   "screen_frames": 3989,
   "is_locked": true,
-  "screen_on": false,
+  "screen_on": true,
   "lock_status": "locked",
   "apps": [
     {
