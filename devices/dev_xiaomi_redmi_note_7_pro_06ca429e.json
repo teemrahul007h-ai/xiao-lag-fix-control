@@ -7,31 +7,24 @@
   "ip": "192.168.1.100",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789195989319,
+  "last_seen": 1789196038442,
   "battery": 94,
   "battery_status": "Discharging • Healthy",
-  "network": "📶 Wi-Fi (XIAO EXE)",
+  "network": "📶 Wi-Fi",
   "location": {
-    "enabled": true,
-    "lat": 23.762918,
-    "lng": 90.413844,
-    "accuracy": 170,
-    "speed": 0,
-    "time": 1789195170311,
-    "has_data": true,
-    "is_live": true,
-    "is_approximate": false,
-    "provider": "network"
+    "enabled": false,
+    "permission": false,
+    "has_data": false
   },
   "ram_total": 5608,
-  "ram_free": 1909,
-  "ram_used_percent": 65,
+  "ram_free": 1745,
+  "ram_used_percent": 68,
   "temp": 37,
   "fps": 60,
   "refresh_rate": 60,
   "guardian_active": true,
-  "screen_sharing": true,
-  "screen_frames": 238738,
+  "screen_sharing": false,
+  "screen_frames": 0,
   "is_locked": false,
   "screen_on": true,
   "lock_status": "unlocked",
@@ -312,7 +305,7 @@
     {
       "name": "bKash",
       "pkg": "com.bKash.customerapp",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -354,14 +347,14 @@
     {
       "name": "Discord",
       "pkg": "com.discord",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
     {
       "name": "Free Fire MAX",
       "pkg": "com.dts.freefiremax",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -375,14 +368,14 @@
     {
       "name": "Facebook",
       "pkg": "com.facebook.katana",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
     {
       "name": "Messenger",
       "pkg": "com.facebook.orca",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -417,14 +410,14 @@
     {
       "name": "pandarider",
       "pkg": "com.logistics.rider.foodpanda",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
     {
       "name": "Ludo King",
       "pkg": "com.ludo.king",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -445,7 +438,7 @@
     {
       "name": "Remini",
       "pkg": "com.remini.xyz",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -466,14 +459,14 @@
     {
       "name": "WA Business",
       "pkg": "com.whatsapp.w4b",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
     {
       "name": "TikTok",
       "pkg": "com.zhiliaoapp.musically",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -494,7 +487,7 @@
     {
       "name": "GitHub",
       "pkg": "org.chromium.webapk.a2e085d07beb91e0e_v2",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -508,7 +501,7 @@
     {
       "name": "Telegram",
       "pkg": "org.telegram.messenger",
-      "selected": true,
+      "selected": false,
       "locked": false,
       "is_system": false
     },
