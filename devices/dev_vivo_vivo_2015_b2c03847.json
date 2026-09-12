@@ -7,10 +7,10 @@
   "ip": "10.71.152.104",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789206159684,
+  "last_seen": 1789206167332,
   "battery": 90,
   "battery_status": "Discharging • Healthy",
-  "network": "📶 Mobile Data (Robi)",
+  "network": "Offline \/ Disconnected",
   "location": {
     "enabled": false,
     "lat": 23.76052,
@@ -24,7 +24,7 @@
     "provider": "network"
   },
   "ram_total": 1822,
-  "ram_free": 532,
+  "ram_free": 545,
   "ram_used_percent": 70,
   "ram_hardware": "2 GB",
   "storage_total": "32 GB",
@@ -36,7 +36,7 @@
   "hardware_health_score": 98,
   "guardian_active": true,
   "is_locked": true,
-  "screen_on": false,
+  "screen_on": true,
   "lock_status": "locked",
   "apps": [
     {
