@@ -7,27 +7,27 @@
   "ip": "10.29.214.112",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789295367247,
+  "last_seen": 1789295547798,
   "battery": 82,
   "battery_status": "Discharging • Healthy",
   "network": "📶 Mobile Data (Robi)",
   "location": {
     "enabled": true,
-    "lat": 23.736013,
-    "lng": 90.412268,
-    "accuracy": 7,
+    "lat": 23.736745,
+    "lng": 90.412652,
+    "accuracy": 3,
     "speed": 0,
-    "bearing": 71,
-    "altitude": 9,
-    "time": 1789295280000,
+    "bearing": 54,
+    "altitude": 3,
+    "time": 1789295548000,
     "has_data": true,
     "is_live": true,
     "is_approximate": false,
     "provider": "gps"
   },
   "ram_total": 1822,
-  "ram_free": 394,
-  "ram_used_percent": 78,
+  "ram_free": 450,
+  "ram_used_percent": 75,
   "ram_hardware": "2 GB",
   "storage_total": "32 GB",
   "activation_date": "01 Jan 2009, 06:00 AM (17y 8m ago)",
@@ -37,9 +37,9 @@
   "hardware_health": "98% • Excellent (চমৎকার স্থায়িত্ব)",
   "hardware_health_score": 98,
   "guardian_active": true,
-  "is_locked": false,
-  "screen_on": true,
-  "lock_status": "unlocked",
+  "is_locked": true,
+  "screen_on": false,
+  "lock_status": "locked",
   "apps": [
     {
       "name": "Albums",
@@ -385,5 +385,11 @@
       "is_system": false
     }
   ],
-  "running_apps": []
+  "running_apps": [
+    {
+      "name": "com.lagfix.booster:core",
+      "pkg": "com.lagfix.booster:core",
+      "importance": "Background"
+    }
+  ]
 }
