@@ -7,10 +7,10 @@
   "ip": "10.221.150.202",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789389913517,
+  "last_seen": 1789390808134,
   "battery": 93,
   "battery_status": "Discharging • Healthy",
-  "network": "📶 Mobile Data (Robi)",
+  "network": "Offline \/ Disconnected",
   "location": {
     "enabled": false,
     "lat": 23.76016,
@@ -24,8 +24,8 @@
     "provider": "network"
   },
   "ram_total": 1822,
-  "ram_free": 577,
-  "ram_used_percent": 68,
+  "ram_free": 636,
+  "ram_used_percent": 65,
   "ram_hardware": "2 GB",
   "storage_total": "32 GB",
   "activation_date": "01 Jan 2009, 06:00 AM (17y 8m ago)",
