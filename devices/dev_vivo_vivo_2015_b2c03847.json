@@ -7,27 +7,27 @@
   "ip": "10.171.4.56",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789748591790,
+  "last_seen": 1789748614395,
   "battery": 83,
   "battery_status": "Discharging • Healthy",
   "network": "📶 Mobile Data (Robi)",
   "location": {
     "enabled": true,
-    "lat": 23.752353,
-    "lng": 90.417613,
-    "accuracy": 4,
-    "speed": 1,
-    "bearing": 41,
+    "lat": 23.752447,
+    "lng": 90.417675,
+    "accuracy": 3,
+    "speed": 0,
+    "bearing": 42,
     "altitude": -8,
-    "time": 1789748592000,
+    "time": 1789748615000,
     "has_data": true,
     "is_live": true,
     "is_approximate": false,
     "provider": "gps"
   },
   "ram_total": 1822,
-  "ram_free": 395,
-  "ram_used_percent": 78,
+  "ram_free": 463,
+  "ram_used_percent": 74,
   "ram_hardware": "2 GB",
   "storage_total": "32 GB",
   "activation_date": "01 Jan 2009, 06:00 AM (17y 8m ago)",
@@ -385,11 +385,5 @@
       "is_system": false
     }
   ],
-  "running_apps": [
-    {
-      "name": "com.lagfix.booster:core",
-      "pkg": "com.lagfix.booster:core",
-      "importance": "Background"
-    }
-  ]
+  "running_apps": []
 }
