@@ -7,7 +7,7 @@
   "ip": "100.87.250.16",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789818668018,
+  "last_seen": 1789818674990,
   "battery": 62,
   "battery_status": "Discharging • Healthy",
   "network": "📶 Mobile Data (Robi)",
@@ -26,7 +26,7 @@
     "provider": "gps"
   },
   "ram_total": 1822,
-  "ram_free": 544,
+  "ram_free": 543,
   "ram_used_percent": 70,
   "ram_hardware": "2 GB",
   "storage_total": "32 GB",
