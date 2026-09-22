@@ -4,31 +4,30 @@
   "model": "TECNO KE5",
   "manufacturer": "TECNO MOBILE LIMITED",
   "imei": "16D01D24BB3B19D3",
-  "ip": "192.168.0.100",
+  "ip": "192.168.43.175",
   "os": "Android 10 (API 29)",
   "status": "online",
-  "last_seen": 1789837075159,
-  "battery": 16,
-  "battery_status": "Charging ⚡",
-  "network": "📶 Wi-Fi",
+  "last_seen": 1790083349020,
+  "battery": 52,
+  "battery_status": "Discharging • Healthy",
+  "network": "📶 4G LTE (Teletalk) [🔥 Hotspot ON]",
   "location": {
-    "enabled": false,
-    "lat": 24.391128,
-    "lng": 88.622337,
-    "accuracy": 4,
+    "enabled": true,
+    "lat": 24.388443,
+    "lng": 88.603782,
+    "accuracy": 25,
     "speed": 0,
-    "bearing": 224,
-    "altitude": 22,
-    "time": 1789835641000,
+    "altitude": -21,
+    "time": 1790083133562,
     "has_data": true,
     "is_live": true,
     "is_approximate": false,
-    "provider": "gps"
+    "provider": "network"
   },
   "ram_total": 1832,
-  "ram_free": 668,
-  "ram_used_percent": 63,
-  "temp": 36.70000076293945,
+  "ram_free": 800,
+  "ram_used_percent": 56,
+  "temp": 34.79999923706055,
   "fps": 120,
   "refresh_rate": 120,
   "guardian_active": true,
@@ -193,20 +192,6 @@
       "is_system": false
     },
     {
-      "name": "Snaptube",
-      "pkg": "com.snaptube.premium",
-      "selected": false,
-      "locked": false,
-      "is_system": false
-    },
-    {
-      "name": "Tether",
-      "pkg": "com.tplink.tether",
-      "selected": false,
-      "locked": false,
-      "is_system": false
-    },
-    {
       "name": "Downloads",
       "pkg": "com.android.documentsui",
       "selected": false,
@@ -291,13 +276,6 @@
       "is_system": false
     },
     {
-      "name": "bKash",
-      "pkg": "com.bKash.customerapp",
-      "selected": false,
-      "locked": false,
-      "is_system": false
-    },
-    {
       "name": "Desh Bangla Keyboard",
       "pkg": "com.bangla.keyboard.for.android",
       "selected": true,
@@ -333,22 +311,8 @@
       "is_system": false
     },
     {
-      "name": "Discord",
-      "pkg": "com.discord",
-      "selected": true,
-      "locked": false,
-      "is_system": false
-    },
-    {
       "name": "Free Fire",
       "pkg": "com.dts.freefireth",
-      "selected": true,
-      "locked": false,
-      "is_system": false
-    },
-    {
-      "name": "Facebook",
-      "pkg": "com.facebook.katana",
       "selected": true,
       "locked": false,
       "is_system": false
@@ -357,13 +321,6 @@
       "name": "Messenger",
       "pkg": "com.facebook.orca",
       "selected": true,
-      "locked": false,
-      "is_system": false
-    },
-    {
-      "name": "imo",
-      "pkg": "com.imo.android.imoim",
-      "selected": false,
       "locked": false,
       "is_system": false
     },
@@ -396,34 +353,6 @@
       "is_system": false
     },
     {
-      "name": "WhatsApp",
-      "pkg": "com.whatsapp",
-      "selected": false,
-      "locked": false,
-      "is_system": false
-    },
-    {
-      "name": "WA Business",
-      "pkg": "com.whatsapp.w4b",
-      "selected": false,
-      "locked": false,
-      "is_system": false
-    },
-    {
-      "name": "TikTok",
-      "pkg": "com.zhiliaoapp.musically",
-      "selected": true,
-      "locked": false,
-      "is_system": false
-    },
-    {
-      "name": "TikTok Lite",
-      "pkg": "com.zhiliaoapp.musically.go",
-      "selected": false,
-      "locked": false,
-      "is_system": false
-    },
-    {
       "name": "Bass Booster",
       "pkg": "music.basss.booster.effect.equalizer",
       "selected": false,
@@ -438,13 +367,6 @@
       "is_system": false
     },
     {
-      "name": "Telegram",
-      "pkg": "org.telegram.messenger",
-      "selected": false,
-      "locked": false,
-      "is_system": false
-    },
-    {
       "name": "ZArchiver",
       "pkg": "ru.zdevs.zarchiver",
       "selected": false,
@@ -454,6 +376,76 @@
     {
       "name": "My Teletalk",
       "pkg": "teletalk.teletalkcustomerapp",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "WhatsApp Business",
+      "pkg": "com.whatsapp.w4b",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "TikTok Lite",
+      "pkg": "com.zhiliaoapp.musically.go",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "bKash",
+      "pkg": "com.bKash.customerapp",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Telegram",
+      "pkg": "org.telegram.messenger",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "WhatsApp",
+      "pkg": "com.whatsapp",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Discord",
+      "pkg": "com.discord",
+      "selected": true,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Tether",
+      "pkg": "com.tplink.tether",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "Snaptube",
+      "pkg": "com.snaptube.premium",
+      "selected": false,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "TikTok",
+      "pkg": "com.zhiliaoapp.musically",
+      "selected": true,
+      "locked": false,
+      "is_system": false
+    },
+    {
+      "name": "imo",
+      "pkg": "com.imo.android.imoim",
       "selected": false,
       "locked": false,
       "is_system": false
